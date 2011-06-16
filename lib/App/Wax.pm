@@ -50,7 +50,7 @@ has ua => (
     is      => 'rw',
     isa     => 'LWP::UserAgent',
     lazy    => 1,
-    default => sub { LWP::UserAgent->new() }
+    default => sub { LWP::UserAgent->new(env_proxy => 1) }
 );
 
 has user_agent => (
@@ -121,7 +121,9 @@ method uri_to_path($uri) {
             unless ($extension) {
                 my $mime_type = $self->mime_types->type($content_type);
                 my @extensions = $mime_type->extensions;
-                $extension = '.' . $extensions[0];
+                if (@extensions) {
+                    $extension = '.' . $extensions[0];
+                }
             }
 
             $extension;
@@ -136,8 +138,6 @@ method uri_to_path($uri) {
 }
 
 method run ($argv) {
-    $| = 1;
-
     $self->usage unless (@$argv);
 
     my $wax_options = 1;
@@ -149,13 +149,15 @@ method run ($argv) {
 
         if ($wax_options) {
             if ($arg =~ /^(?:-[?h]|--help)$/) {
-                exec('perldoc', $self->app_name());
+                exec('perldoc', $self->app_name);
             } elsif ($arg =~ /^(?:-d|--debug)$/) {
                 $self->debug(1);
             } elsif ($arg =~ /^(?:-t|--timeout)$/) {
                 $self->timeout(shift @$argv);
             } elsif ($arg =~ /^(?:-u|--user-agent)$/) {
-                $self->user_agent(shift @$argv);
+                $self->agent(shift @$argv);
+            } elsif ($arg =~ /^-/) {
+                $self->usage;
             } else {
                 $command = $arg;
                 $wax_options = 0;
@@ -197,7 +199,7 @@ App::Wax - Helper library for wax
 C<App::Wax> is the helper library for wax, a simple command-line program that runs
 other command-line programs and converts their URI arguments to file paths.
 
-See the L<wax> man page for more details.
+See the L<wax> documentation for more details.
 
 =head1 ATTRIBUTES
 

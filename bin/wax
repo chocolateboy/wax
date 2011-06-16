@@ -5,6 +5,7 @@ use warnings;
 
 use App::Wax;
 
+$| = 1; # unbuffer output
 my $wax = App::Wax->new();
 exit $wax->run(\@ARGV);
 
@@ -20,7 +21,7 @@ wax - Webify Your CLI
 
 =head1 SYNOPSIS
 
-    $ wax grep -F needle http://www.haysta.ck
+    $ wax grep needle http://www.haysta.ck
     $ wax espeak -f http://www.setec.org/mel.txt
 
     $ alias perldoc="wax perldoc"
