@@ -1,0 +1,34 @@
+App::Wax 0.0.1
+===========================
+
+App::Wax provides wax, a simple command-line tool that runs other command-line programs and converts their URI
+arguments to file paths. The remote resources are saved as temporary files, which are
+cleaned up after the waxed program has exited.
+
+INSTALLATION
+
+To install this module type the following:
+
+    perl Makefile.PL
+    make
+    make test
+    make install
+
+DEPENDENCIES
+
+This module requires these other modules and libraries:
+
+    HTTP::Request
+    LWP
+    Method::Signatures::Simple
+    MIME::Types
+    Mouse
+    URI
+
+COPYRIGHT AND LICENCE
+
+Copyright (C) 2010-2011 by chocolateboy
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.10.0 or,
+at your option, any later version of Perl 5 you may have available.
