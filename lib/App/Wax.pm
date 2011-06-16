@@ -1,14 +1,14 @@
 package App::Wax;
 
-use 5.006002;
+use 5.008008;
 
 use strict;
 use warnings;
 
 use constant {
-    TEMPLATE   => 'wax_XXXXXXXX',
-    USER_AGENT => 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.2.8) Gecko/20100723 Firefox/3.6.8',
+    NAME       => 'wax',
     TIMEOUT    => 5,
+    USER_AGENT => 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.2.8) Gecko/20100723 Firefox/3.6.8',
 };
 
 use File::Temp;
@@ -19,7 +19,13 @@ use MIME::Types;
 use Mouse;
 use URI::Split qw(uri_split);
 
-our $VERSION = 0.0.1;
+our $VERSION = '0.0.1';
+
+has app_name => (
+    is      => 'rw',
+    isa     => 'Str',
+    default => NAME
+);
 
 has debug => (
     is      => 'rw',
@@ -74,7 +80,8 @@ method download ($uri, $filename) {
 }
 
 method usage {
-    die "usage: $0 [OPTIONS] program [OPTIONS] ...", $/;
+    my $name = $self->app_name;
+    die "usage: $name [OPTIONS] program [OPTIONS] ...", $/;
 }
 
 method log {
@@ -141,7 +148,9 @@ method run ($argv) {
         my $temp_file;
 
         if ($wax_options) {
-            if ($arg =~ /^(?:-d|--debug)$/) {
+            if ($arg =~ /^(?:-[?h]|--help)$/) {
+                exec('perldoc', $self->app_name());
+            } elsif ($arg =~ /^(?:-d|--debug)$/) {
                 $self->debug(1);
             } elsif ($arg =~ /^(?:-t|--timeout)$/) {
                 $self->timeout(shift @$argv);
@@ -176,73 +185,93 @@ __END__
 
 =head1 NAME
 
-App::Wax - Webify Your CLI
-
-=head1 USAGE
-
-    wax [OPTIONS] program [OPTIONS] ...
+App::Wax - Helper library for wax
 
 =head1 SYNOPSIS
 
-    $ wax grep -F needle http://www.haysta.ck
-    $ wax espeak -f http://www.setec.org/mel.txt
-
-    $ alias perldoc="wax perldoc"
-    $ perldoc -F "http://www.pair.com/~comdog/brian's_guide.pod"
+    my $wax = App::Wax->new();
+    $wax->run(\@ARGV);
 
 =head1 DESCRIPTION
 
-C<wax> is a simple command-line program that runs other command-line programs and converts their URI
-arguments to file paths. The remote resources are saved as temporary files, which are
-cleaned up after the waxed program has exited.
+C<App::Wax> is the helper library for wax, a simple command-line program that runs
+other command-line programs and converts their URI arguments to file paths.
 
-=head1 OPTIONS
+See the L<wax> man page for more details.
 
-The following wax options can be supplied before the command name. Subsequent options are passed to
-the waxed program verbatim, apart from URIs, which are converted to paths to the corresponding temporary
-files. To exclude args from waxing, pass them after C<--> e.g.
+=head1 ATTRIBUTES
 
-    wax --timeout 5 command -f http://example.com -- --title http://www.example.com
+Attributes are fields that can optionally be set in the C<App::Wax> constructor,
+and get/set by invoking the corresponding getter/setter methods (which have the
+same names as the constructor fields) after the C<App::Wax>
+object has been initialized. Attributes can be initalized with a hash or hash ref e.g.
 
-=head2 -d, --debug
+    my $wax = App::Wax->new(debug => 1);
+    $wax->timeout(60);
+    $wax->run(\@ARGV);
 
-Print diagnostic information to STDERR.
+=head2 app_name([ $name ])
 
-=head2 -t, --timeout INTEGER
+Getter/setter for the name used in the usage message and used to launch perldoc for the C<--help> &c.
+options. Default: C<wax>.
 
-Set the timeout for HTTP requests in seconds. Default: 5.
+=head2 debug([ $bool ])
 
-=head2 -u, --user-agent STRING
+Gets or sets the debug flag, used to determine whether to display diagnostic messages.
 
-Set the user-agent string for HTTP requests.
+=head2 timeout([ $timeout ])
+
+Getter/setter for the timeout (in seconds) for HTTP requests.
+
+=head2 ua([ $ua ])
+
+Getter/setter for the L<LWP::UserAgent> instance used to perform HTTP requests.
+
+=head2 user_agent([ $user_agent ])
+
+Getter/setter for the HTTP user-agent string.
+
+=head1 METHODS
+
+=head2 content_type($uri)
+
+Returns the content type for the supplied URI.
+
+=head2 download($uri, $path)
+
+Saves the contents of the URI to the specified path.
+
+=head2 log(@message)
+
+Logs the string or list of strings to STDERR if debugging is enabled.
+
+=head2 mime_types()
+
+Getter for the L<MIME::Types> instance used to map the L<"content_type"> to an extension.
+
+=head2 run($argv)
+
+Takes a reference to a list of C<@ARGV>-style arguments and runs the specified command with substituted URIs.
+Returns the command's exit code.
+
+=head2 uri_to_path($uri)
+
+Returns undef if the supplied argument isn't a URI, or a L<File::Temp> object representing the
+temporary file to which the URI should be mirrored otherwise.
+
+=head2 usage()
+
+Prints a brief usage method and exits.
 
 =head1 EXPORT
 
 None by default.
 
-=head1 CAVEATS
-
-As with any command-line programs that take URI parameters, care should be taken to ensure that
-special shell characters are suitably quoted. As a general rule, URIs that contain C<&>, C<~>,
-C<<>, C<>>, C<$> &c. should be single- or double-quoted on Unix-like shells and double-quoted with embedded
-escapes in Windows C<cmd/command.exe>-like shells.
-
-It's worth checking that a program actually needs waxing. Many command-line programs already support URIs:
-
-    vim http://www.vim.org/
-    gedit http://projects.gnome.org/gedit/
-    eog http://upload.wikimedia.org/wikipedia/commons/4/4c/Eye_of_GNOME.png
-    gimp http://upload.wikimedia.org/wikipedia/commons/6/6c/Gimpscreen.png
-
-&c.
-
 =head1 SEE ALSO
 
 =over
 
-=item * rlwrap
-
-=item * sshfs
+=item * L<wax>
 
 =begin html
 

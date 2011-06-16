@@ -1,7 +1,7 @@
 App::Wax 0.0.1
 ===========================
 
-App::Wax provides wax, a simple command-line tool that runs other command-line programs and converts their URI
+App::Wax provides wax, a simple command-line program that runs other command-line programs and converts their URI
 arguments to file paths. The remote resources are saved as temporary files, which are
 cleaned up after the waxed program has exited.
 
