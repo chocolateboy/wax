@@ -19,7 +19,7 @@ use MIME::Types;
 use Mouse;
 use URI::Split qw(uri_split);
 
-our $VERSION = '0.0.2';
+our $VERSION = '0.1.0';
 
 has app_name => (
     is      => 'rw',
@@ -59,24 +59,25 @@ has user_agent => (
     default => USER_AGENT
 );
 
-method content_type ($uri) {
-    my $request  = HTTP::Request->new(HEAD => $uri);
+method content_type ($url) {
+    my $request  = HTTP::Request->new(HEAD => $url);
     my $response = $self->ua->request($request);
     my $content_type = '';
 
     if ($response->is_success) {
         ($content_type) = scalar($response->header('Content-Type')) =~ /^([^;]+)/;
+        $self->log("content type: $content_type");
     }
 
     return $content_type;
 }
 
-method download ($uri, $filename) {
-    my $request = HTTP::Request->new(GET => $uri);
+method download ($url, $filename) {
+    my $request = HTTP::Request->new(GET => $url);
     my $response = $self->ua->request($request, $filename);
-    my $rc = $response->code;
+    my $status = $response->status_line;
 
-    die "can't retrieve URI ($rc): $uri" unless ($response->is_success);
+    die "can't save URL ($url) to filename ($filename): $status", $/ unless ($response->is_success);
 }
 
 method usage {
@@ -88,53 +89,58 @@ method log {
     warn ('wax: ', @_, $/) if ($self->debug);
 }
 
-method uri_to_path($uri) {
-    return unless ($uri =~ m{^\w+://});
+method extension($url) {
+    my $split = $self->is_url($url);
 
-    my ($scheme, $auth, $path, $query, $fragment) = uri_split($uri);
+    return unless ($split);
 
-    if ($scheme && $path) {
-        $self->log("uri: $uri");
+    my ($scheme, $domain, $path, $query, $fragment) = @$split;
+    my $content_type = $self->content_type($url);
 
-        my $suffix = do {
-            my $extension;
-            my $content_type = $self->content_type($uri);
-            $self->log("content type: $content_type");
+    return unless ($content_type); # won't be defined if the URL is invalid
 
-            if ($content_type eq 'text/plain') {
-                # require Data::Dumper;
-                # local ($Data::Dumper::Terse, $Data::Dumper::Indent) = (1, 1);
-                # $self->log(Data::Dumper::Dumper({
-                #     scheme   => $scheme,
-                #     auth     => $auth,
-                #     path     => $path,
-                #     query    => $query,
-                #     fragment => $fragment
-                # }));
+    my $extension;
 
-                # try to get a more specific extension from the path
-                if (not(defined $query) && not(defined($fragment)) && ($path =~ /\w+(\.\w+)$/)) {
-                    $extension = $1;
-                }
-            }
-
-            unless ($extension) {
-                my $mime_type = $self->mime_types->type($content_type);
-                my @extensions = $mime_type->extensions;
-                if (@extensions) {
-                    $extension = '.' . $extensions[0];
-                }
-            }
-
-            $extension;
-        };
-
-        my $temp_file = File::Temp->new($suffix ? (SUFFIX => $suffix) : ());
-
-        $self->download($uri, $temp_file->filename);
-
-        return $temp_file; # return the object (rather than the filename) to prevent premature unlinking
+    if ($content_type eq 'text/plain') {
+        # try to get a more specific extension from the path
+        if (not(defined $query) && not(defined($fragment)) && $path && ($path =~ /\w+(\.\w+)$/)) {
+            $extension = $1;
+        }
     }
+
+    unless ($extension) {
+        my $mime_type = $self->mime_types->type($content_type);
+        my @extensions = $mime_type->extensions;
+        if (@extensions) {
+            $extension = '.' . $extensions[0];
+        }
+    }
+
+    $self->log('extension: ', $extension ? $extension : '');
+    return $extension;
+}
+
+method is_url($url) {
+    if ($url =~ m{^[a-zA-Z][\w+]*://}) { # basic sanity check
+        my ($scheme, $domain, $path, $query, $fragment) = uri_split($url);
+        if ($scheme && ($domain || $path)) { # no domain for file:// URLs
+            return [ $scheme, $domain, $path, $query, $fragment ];
+        }
+    }
+}
+
+method url_to_path($url) {
+    return unless ($self->is_url($url));
+
+    $self->log("url: $url");
+
+    my $suffix = $self->extension($url);
+    my $temp_file = File::Temp->new($suffix ? (SUFFIX => $suffix) : ());
+
+    $self->log('filename: ', $temp_file->filename);
+    $self->download($url, $temp_file->filename);
+
+    return $temp_file; # return the object (rather than the filename) to prevent premature unlinking
 }
 
 method run ($argv) {
@@ -165,7 +171,7 @@ method run ($argv) {
         } elsif ($arg eq '--') {
             push @command, @$argv;
             last;
-        } elsif ($temp_file = $self->uri_to_path($arg)) {
+        } elsif ($temp_file = $self->url_to_path($arg)) {
             push @files, $temp_file; # keep a reference to this to prevent premature unlinking
             push @command, $temp_file->filename;
         } else {
@@ -192,12 +198,12 @@ App::Wax - webify your CLI
 =head1 SYNOPSIS
 
     my $wax = App::Wax->new();
-    $wax->run(\@ARGV);
+    exit $wax->run(\@ARGV);
 
 =head1 DESCRIPTION
 
 C<App::Wax> is the helper library for L<wax>, a simple command-line program that runs
-other command-line programs and converts their URI arguments to file paths.
+other command-line programs and converts their URL arguments to file paths.
 
 See the L<wax> documentation for more details.
 
@@ -235,13 +241,23 @@ Getter/setter for the HTTP user-agent string.
 
 =head1 METHODS
 
-=head2 content_type($uri)
+=head2 content_type($url)
 
-Returns the content type for the supplied URI.
+Returns the content type for the supplied URL.
 
-=head2 download($uri, $path)
+=head2 download($url, $path)
 
-Saves the contents of the URI to the specified path.
+Saves the contents of the URL to the specified path.
+
+=head2 extension($url)
+
+Returns the file extension for the given URL (e.g. C<.html>) if one can be determined from the path component of the URL,
+or the resource's C<Content-type> header. Otherwise, returns undef.
+
+=head2 is_url($url)
+
+Returns a true value (a reference to an array of URL components returned by L<URI::Split>'s C<uri_split> method)
+if the supplied string is a valid absolute URL, false otherwise.
 
 =head2 log(@message)
 
@@ -249,17 +265,17 @@ Logs the string or list of strings to STDERR if debugging is enabled.
 
 =head2 mime_types()
 
-Getter for the L<MIME::Types> instance used to map the L<"content_type"> to an extension.
+Getter for the L<MIME::Types> instance used to map the C<content_type> to an extension.
 
 =head2 run($argv)
 
 Takes a reference to a list of C<@ARGV>-style arguments and runs the specified command with temporary filenames
-substituted for URIs. Returns the command's exit code.
+substituted for URLs. Returns the command's exit code.
 
-=head2 uri_to_path($uri)
+=head2 url_to_path($url)
 
-Returns undef if the supplied argument isn't a URI, or a L<File::Temp> object representing the
-temporary file to which the URI should be mirrored otherwise.
+Returns undef if the supplied argument isn't a URL, or a L<File::Temp> object representing the
+temporary file to which the URL should be mirrored otherwise.
 
 =head2 usage()
 
@@ -271,7 +287,7 @@ None by default.
 
 =head1 VERSION
 
-0.0.2
+0.1.0
 
 =head1 SEE ALSO
 

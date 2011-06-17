@@ -29,14 +29,14 @@ wax - webify your CLI
 
 =head1 DESCRIPTION
 
-C<wax> is a simple command-line program that runs other command-line programs and converts their URI
+C<wax> is a simple command-line program that runs other command-line programs and converts their URL
 arguments to file paths. The remote resources are saved as temporary files, which are
 cleaned up after the waxed program has exited.
 
 =head1 OPTIONS
 
 The following wax options can be supplied before the command name. Subsequent options are passed to
-the waxed program verbatim, apart from URIs, which are converted to paths to the corresponding temporary
+the waxed program verbatim, apart from URLs, which are converted to paths to the corresponding temporary
 files. To exclude args from waxing, pass them after C<--> e.g.
 
     wax --timeout 5 command -f http://www.example.com -- --title http://www.example.com
@@ -59,12 +59,12 @@ Set the user-agent string for HTTP requests.
 
 =head1 CAVEATS
 
-As with any command-line programs that take URI parameters, care should be taken to ensure that
-special shell characters are suitably quoted. As a general rule, URIs that contain C<&>, C<~>,
+As with any command-line programs that take URL parameters, care should be taken to ensure that
+special shell characters are suitably quoted. As a general rule, URLs that contain C<&>, C<~>,
 C<E<lt>>, C<E<gt>>, C<$> &c. should be single- or double-quoted in shells on Unix-like systems,
 and double-quoted with embedded escapes in Windows C<cmd>/C<command.exe>-like shells.
 
-It's worth checking that a program actually needs waxing. Many command-line programs already support URIs:
+It's worth checking that a program actually needs waxing. Many command-line programs already support URLs:
 
     vim http://www.vim.org/
     gedit http://projects.gnome.org/gedit/
@@ -75,7 +75,7 @@ It's worth checking that a program actually needs waxing. Many command-line prog
 
 =head1 VERSION
 
-0.0.2
+0.1.0
 
 =head1 SEE ALSO
 

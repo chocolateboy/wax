@@ -1,7 +1,7 @@
-App::Wax 0.0.2
+App::Wax 0.1.0
 ===========================
 
-wax is a simple command-line program that runs other command-line programs and converts their URI
+wax is a simple command-line program that runs other command-line programs and converts their URL
 arguments to file paths. The remote resources are saved as temporary files, which are
 cleaned up after the waxed program has exited.
 

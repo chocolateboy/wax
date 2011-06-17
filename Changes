@@ -1,5 +1,10 @@
 Revision history for Perl extension App::Wax.
 
+0.1.0 Fri Jun 17 14:28:28 2011
+    - fix extension handling
+    - better error handling
+    - s/URI/URL/g
+
 0.0.2 Fri Jun 17 05:11:59 2011
     - docfixen
 
