@@ -1,5 +1,14 @@
 Revision history for Perl extension App::Wax.
 
+0.2.0 Fri Jun 17 18:23:13 2011
+    - fix user-agent and timeout accessors
+    - increase default timeout to 60 seconds
+    - add -s/--separator option to allow the "stop waxing" token to be customized
+    - save temp files with a wax_ prefix
+    - more tests
+    - better repo link
+    - add README.md
+
 0.1.0 Fri Jun 17 14:28:28 2011
     - fix extension handling
     - better error handling

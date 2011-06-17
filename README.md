@@ -87,7 +87,7 @@ It's worth checking that a program actually needs waxing. Many command-line prog
 
 # VERSION
 
-0.1.0
+0.2.0
 
 # SEE ALSO
 

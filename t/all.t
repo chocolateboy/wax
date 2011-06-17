@@ -3,15 +3,19 @@
 use strict;
 use warnings;
 
-use Test::More tests => 9;
+use Test::More tests => 15;
 
 use_ok('App::Wax');
 
 my $wax = App::Wax->new();
 
-is $wax->debug, 0;
+is $wax->debug, App::Wax->DEBUG();
 is $wax->timeout, App::Wax->TIMEOUT();
+is $wax->ua->timeout, App::Wax->TIMEOUT();
 is $wax->user_agent, App::Wax->USER_AGENT();
+is $wax->ua->agent, App::Wax->USER_AGENT();
+is $wax->separator, App::Wax->SEPARATOR();
+
 isa_ok $wax->mime_types, 'MIME::Types';
 isa_ok $wax->ua, 'LWP::UserAgent';
 
@@ -20,6 +24,11 @@ is $wax->debug, 1;
 
 $wax->timeout(42);
 is $wax->timeout, 42;
+is $wax->ua->timeout, 42;
 
 $wax->user_agent('Mozilla');
 is $wax->user_agent, 'Mozilla';
+is $wax->ua->agent, 'Mozilla';
+
+$wax->separator('--nowax');
+is $wax->separator, '--nowax';

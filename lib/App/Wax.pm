@@ -6,8 +6,12 @@ use strict;
 use warnings;
 
 use constant {
+    DEBUG      => 0,
+    ENV_PROXY  => 1,
     NAME       => 'wax',
-    TIMEOUT    => 5,
+    SEPARATOR  => '--',
+    TEMPLATE   => 'XXXXXXXX',
+    TIMEOUT    => 60,
     USER_AGENT => 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.2.8) Gecko/20100723 Firefox/3.6.8',
 };
 
@@ -19,7 +23,7 @@ use MIME::Types;
 use Mouse;
 use URI::Split qw(uri_split);
 
-our $VERSION = '0.1.0';
+our $VERSION = '0.2.0';
 
 has app_name => (
     is      => 'rw',
@@ -30,9 +34,10 @@ has app_name => (
 has debug => (
     is      => 'rw',
     isa     => 'Bool',
-    default => 0
+    default => DEBUG
 );
 
+# FIXME: this should be a class attribute, but there's no MouseX::ClassAttribute (on CPAN)
 has mime_types => (
     is      => 'ro',
     isa     => 'MIME::Types',
@@ -40,23 +45,37 @@ has mime_types => (
     default => sub { MIME::Types->new() }
 );
 
+has separator => (
+    is      => 'rw',
+    isa     => 'Str',
+    default => SEPARATOR
+);
+
 has timeout => (
     is      => 'rw',
     isa     => 'Int',
-    default => TIMEOUT
+    default => TIMEOUT,
+    trigger => method ($timeout) { $self->ua->timeout($timeout) }
 );
 
 has ua => (
     is      => 'rw',
     isa     => 'LWP::UserAgent',
     lazy    => 1,
-    default => sub { LWP::UserAgent->new(env_proxy => 1) }
+    default => method {
+        LWP::UserAgent->new(
+            env_proxy => ENV_PROXY,
+            timeout   => $self->timeout,
+            agent     => $self->user_agent
+          )
+      }
 );
 
 has user_agent => (
     is      => 'rw',
     isa     => 'Str',
-    default => USER_AGENT
+    default => USER_AGENT,
+    trigger => method ($user_agent) { $self->ua->agent($user_agent) }
 );
 
 method content_type ($url) {
@@ -73,8 +92,9 @@ method content_type ($url) {
 }
 
 method download ($url, $filename) {
+    my $ua = $self->ua;
     my $request = HTTP::Request->new(GET => $url);
-    my $response = $self->ua->request($request, $filename);
+    my $response = $ua->request($request, $filename);
     my $status = $response->status_line;
 
     die "can't save URL ($url) to filename ($filename): $status", $/ unless ($response->is_success);
@@ -129,13 +149,14 @@ method is_url($url) {
     }
 }
 
-method url_to_path($url) {
+method url_to_temp_file($url) {
     return unless ($self->is_url($url));
 
     $self->log("url: $url");
 
     my $suffix = $self->extension($url);
-    my $temp_file = File::Temp->new($suffix ? (SUFFIX => $suffix) : ());
+    my $template = sprintf('%s_%s', $self->app_name, TEMPLATE);
+    my $temp_file = File::Temp->new($suffix ? (SUFFIX => $suffix) : (), TEMPLATE => $template, TMPDIR => 1);
 
     $self->log('filename: ', $temp_file->filename);
     $self->download($url, $temp_file->filename);
@@ -147,31 +168,39 @@ method run ($argv) {
     $self->usage unless (@$argv);
 
     my $wax_options = 1;
+    my $seen_url = 0;
     my ($command, @command, @files);
 
     while (@$argv) {
         my $arg = shift @$argv;
-        my $temp_file;
 
         if ($wax_options) {
-            if ($arg =~ /^(?:-[?h]|--help)$/) {
-                exec('perldoc', $self->app_name);
-            } elsif ($arg =~ /^(?:-d|--debug)$/) {
+            if ($arg =~ /^(?:-d|--debug)$/) {
                 $self->debug(1);
+            } elsif ($arg =~ /^(?:-[?h]|--help)$/) {
+                exec('perldoc', $self->app_name);
+            } elsif ($arg =~ /^(?:-s|--separator)$/) {
+                $self->separator(shift @$argv);
             } elsif ($arg =~ /^(?:-t|--timeout)$/) {
                 $self->timeout(shift @$argv);
             } elsif ($arg =~ /^(?:-u|--user-agent)$/) {
                 $self->agent(shift @$argv);
-            } elsif ($arg =~ /^-/) {
+            } elsif ($arg =~ /^-/) { # unknown option
                 $self->usage;
-            } else {
+            } else { # non-option: exit the wax-options processing stage
                 $command = $arg;
                 $wax_options = 0;
             }
-        } elsif ($arg eq '--') {
+        } elsif ($arg eq $self->separator) {
             push @command, @$argv;
             last;
-        } elsif ($temp_file = $self->url_to_path($arg)) {
+        } elsif ($self->is_url($arg)) {
+            unless ($seen_url) {
+                $self->log('user-agent: ', $self->user_agent);
+                $self->log('timeout: ', $self->timeout);
+                $seen_url = 1;
+            }
+            my $temp_file = $self->url_to_temp_file($arg);
             push @files, $temp_file; # keep a reference to this to prevent premature unlinking
             push @command, $temp_file->filename;
         } else {
@@ -218,7 +247,7 @@ object has been initialized. Attributes can be initialized with a hash or hash r
     $wax->timeout(60);
     exit $wax->run(\@ARGV);
 
-=head2 app_name([ $name ])
+=head2 app_name([ $string ])
 
 Getter/setter for the name used in the usage message and used to launch perldoc for the C<--help> &c.
 options. Default: C<wax>.
@@ -227,15 +256,19 @@ options. Default: C<wax>.
 
 Gets or sets the debug flag, used to determine whether to display diagnostic messages.
 
-=head2 timeout([ $timeout ])
+=head2 separator([ $string ])
 
-Getter/setter for the timeout (in seconds) for HTTP requests.
+Gets or sets the separator token used to mark the end of waxable args. Default: C<-->.
+
+=head2 timeout([ $int ])
+
+Getter/setter for the timeout (in seconds) for HTTP requests. Default: 60.
 
 =head2 ua([ $ua ])
 
 Getter/setter for the L<LWP::UserAgent> instance used to perform HTTP requests.
 
-=head2 user_agent([ $user_agent ])
+=head2 user_agent([ $string ])
 
 Getter/setter for the HTTP user-agent string.
 
@@ -272,7 +305,7 @@ Getter for the L<MIME::Types> instance used to map the C<content_type> to an ext
 Takes a reference to a list of C<@ARGV>-style arguments and runs the specified command with temporary filenames
 substituted for URLs. Returns the command's exit code.
 
-=head2 url_to_path($url)
+=head2 url_to_temp_file($url)
 
 Returns undef if the supplied argument isn't a URL, or a L<File::Temp> object representing the
 temporary file to which the URL should be mirrored otherwise.
@@ -287,7 +320,7 @@ None by default.
 
 =head1 VERSION
 
-0.1.0
+0.2.0
 
 =head1 SEE ALSO
 

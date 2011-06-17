@@ -39,7 +39,11 @@ The following wax options can be supplied before the command name. Subsequent op
 the waxed program verbatim, apart from URLs, which are converted to paths to the corresponding temporary
 files. To exclude args from waxing, pass them after C<--> e.g.
 
-    wax --timeout 5 command -f http://www.example.com -- --title http://www.example.com
+    wax --timeout 10 command -f http://www.example.com -- --title http://www.example.com
+
+The separator token can be overridden with the C<-s> or C<--separator> option e.g.
+
+    wax --timeout 10 -s --nowax command -f http://www.example.com --nowax --title http://www.example.com
 
 =head2 -d, --debug
 
@@ -49,9 +53,13 @@ Print diagnostic information to STDERR.
 
 Display this documentation.
 
+=head2 -s, --separator
+
+Set the token used to mark the end of waxable args. Default: C<-->.
+
 =head2 -t, --timeout INTEGER
 
-Set the timeout for HTTP requests in seconds. Default: 5.
+Set the timeout for HTTP requests in seconds. Default: 60.
 
 =head2 -u, --user-agent STRING
 
@@ -75,7 +83,7 @@ It's worth checking that a program actually needs waxing. Many command-line prog
 
 =head1 VERSION
 
-0.1.0
+0.2.0
 
 =head1 SEE ALSO
 

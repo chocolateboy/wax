@@ -1,4 +1,4 @@
-App::Wax 0.1.0
+App::Wax 0.2.0
 ===========================
 
 wax is a simple command-line program that runs other command-line programs and converts their URL
