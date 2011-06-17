@@ -48,7 +48,7 @@ Disable detection of the wax separator token i.e. the default `--` separator is 
 
 ## -t, --timeout INTEGER
 
-Set the timeout for HTTP requests in seconds. Default: 5.
+Set the timeout for HTTP requests in seconds. Default: 60.
 
 ## -u, --user-agent STRING
 
