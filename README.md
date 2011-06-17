@@ -22,7 +22,7 @@ wax - webify your CLI
 
 The following wax options can be supplied before the command name. Subsequent options are passed to the waxed program verbatim, apart from URIs, which are converted to paths to the corresponding temporary files. To exclude args from waxing, pass them after `--` e.g.
 
-    wax --timeout 5 command -f http://www.example.com -- --title http://www.example.com
+    wax --timeout 10 command -f http://www.example.com -- --title http://www.example.com
 
 ## -d, --debug
 
