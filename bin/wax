@@ -61,8 +61,8 @@ Set the user-agent string for HTTP requests.
 
 As with any command-line programs that take URI parameters, care should be taken to ensure that
 special shell characters are suitably quoted. As a general rule, URIs that contain C<&>, C<~>,
-C<<>, C<>>, C<$> &c. should be single- or double-quoted in shells on Unix-like systems, and double-quoted with embedded
-escapes in Windows C<cmd/command.exe>-like shells.
+C<E<lt>>, C<E<gt>>, C<$> &c. should be single- or double-quoted in shells on Unix-like systems,
+and double-quoted with embedded escapes in Windows C<cmd>/C<command.exe>-like shells.
 
 It's worth checking that a program actually needs waxing. Many command-line programs already support URIs:
 
