@@ -40,11 +40,11 @@ Display this documentation.
 
 Set the token used to mark the end of waxable options. Default: `--`.
 
+Note: the separator token is removed from the list of options passed to the command.
+
 ## -S, --no-separator
 
 Disable detection of the wax separator token i.e. the default `--` separator is not used to mark the end of waxable options.
-
-Note: the separator token is removed from the list of options passed to the command.
 
 ## -t, --timeout INTEGER
 
