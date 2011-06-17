@@ -1,5 +1,9 @@
 Revision history for Perl extension App::Wax.
 
+0.3.1 Fri Jun 17 21:16:43 2011
+    - docfixen
+    - rm README.md from CPAN
+
 0.3.0 Fri Jun 17 19:29:40 2011
     - add -S/--no-separator option, allowing detection of the "stop waxing" token to be disabled
 

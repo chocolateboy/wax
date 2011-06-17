@@ -35,7 +35,7 @@ cleaned up after the waxed program has exited.
 
 =head1 OPTIONS
 
-The following wax options can be supplied before the command name. Subsequent options are passed to
+The following C<wax> options can be supplied before the command name. Subsequent options are passed to
 the waxed program verbatim, apart from URLs, which are converted to paths to the corresponding temporary
 files. To exclude args from waxing, pass them after C<--> e.g.
 
@@ -61,7 +61,8 @@ Note: the separator token is removed from the list of options passed to the comm
 
 =head2 -S, --no-separator
 
-Disable detection of the wax separator token i.e. the default C<--> separator is not used to mark the end of waxable options.
+Disable detection of the C<wax> separator token i.e. the default C<--> separator is not used to mark
+the end of waxable options.
 
 =head2 -t, --timeout INTEGER
 
@@ -89,7 +90,7 @@ It's worth checking that a program actually needs waxing. Many command-line prog
 
 =head1 VERSION
 
-0.3.0
+0.3.1
 
 =head1 SEE ALSO
 

@@ -20,7 +20,7 @@ wax - webify your CLI
 
 # OPTIONS
 
-The following wax options can be supplied before the command name. Subsequent options are passed to the waxed program verbatim, apart from URLs, which are converted to paths to the corresponding temporary files. To exclude args from waxing, pass them after `--` e.g.
+The following `waa`x options can be supplied before the command name. Subsequent options are passed to the waxed program verbatim, apart from URLs, which are converted to paths to the corresponding temporary files. To exclude args from waxing, pass them after `--` e.g.
 
     wax command -f http://www.example.com -- --title http://www.example.com
 
@@ -44,7 +44,7 @@ Note: the separator token is removed from the list of options passed to the comm
 
 ## -S, --no-separator
 
-Disable detection of the wax separator token i.e. the default `--` separator is not used to mark the end of waxable options.
+Disable detection of the `wax` separator token i.e. the default `--` separator is not used to mark the end of waxable options.
 
 ## -t, --timeout INTEGER
 
@@ -101,7 +101,7 @@ It's worth checking that a program actually needs waxing. Many command-line prog
 
 # VERSION
 
-0.3.0
+0.3.1
 
 # SEE ALSO
 

@@ -23,7 +23,7 @@ use MIME::Types;
 use Mouse;
 use URI::Split qw(uri_split);
 
-our $VERSION = '0.3.0';
+our $VERSION = '0.3.1';
 
 has app_name => (
     is      => 'rw',
@@ -325,7 +325,7 @@ None by default.
 
 =head1 VERSION
 
-0.3.0
+0.3.1
 
 =head1 SEE ALSO
 
