@@ -13,7 +13,7 @@ __END__
 
 =head1 NAME
 
-wax - Webify Your CLI
+wax - webify your CLI
 
 =head1 USAGE
 
@@ -39,13 +39,13 @@ The following wax options can be supplied before the command name. Subsequent op
 the waxed program verbatim, apart from URIs, which are converted to paths to the corresponding temporary
 files. To exclude args from waxing, pass them after C<--> e.g.
 
-    wax --timeout 5 command -f http://example.com -- --title http://www.example.com
+    wax --timeout 5 command -f http://www.example.com -- --title http://www.example.com
 
 =head2 -d, --debug
 
 Print diagnostic information to STDERR.
 
-=head2 -h, -?, --help
+=head2 -?, -h, --help
 
 Display this documentation.
 
@@ -61,7 +61,7 @@ Set the user-agent string for HTTP requests.
 
 As with any command-line programs that take URI parameters, care should be taken to ensure that
 special shell characters are suitably quoted. As a general rule, URIs that contain C<&>, C<~>,
-C<<>, C<>>, C<$> &c. should be single- or double-quoted in Unix-like shells and double-quoted with embedded
+C<<>, C<>>, C<$> &c. should be single- or double-quoted in shells on Unix-like systems, and double-quoted with embedded
 escapes in Windows C<cmd/command.exe>-like shells.
 
 It's worth checking that a program actually needs waxing. Many command-line programs already support URIs:
@@ -72,6 +72,10 @@ It's worth checking that a program actually needs waxing. Many command-line prog
     gimp http://upload.wikimedia.org/wikipedia/commons/6/6c/Gimpscreen.png
 
 &c.
+
+=head1 VERSION
+
+0.0.2
 
 =head1 SEE ALSO
 

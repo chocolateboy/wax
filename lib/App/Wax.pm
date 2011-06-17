@@ -19,7 +19,7 @@ use MIME::Types;
 use Mouse;
 use URI::Split qw(uri_split);
 
-our $VERSION = '0.0.1';
+our $VERSION = '0.0.2';
 
 has app_name => (
     is      => 'rw',
@@ -129,11 +129,11 @@ method uri_to_path($uri) {
             $extension;
         };
 
-        my $temp_file = File::Temp->new($suffix ? (SUFFIX  => $suffix) : ());
+        my $temp_file = File::Temp->new($suffix ? (SUFFIX => $suffix) : ());
 
         $self->download($uri, $temp_file->filename);
 
-        return $temp_file; # return the object to prevent premature unlinking
+        return $temp_file; # return the object (rather than the filename) to prevent premature unlinking
     }
 }
 
@@ -187,7 +187,7 @@ __END__
 
 =head1 NAME
 
-App::Wax - Helper library for wax
+App::Wax - webify your CLI
 
 =head1 SYNOPSIS
 
@@ -196,7 +196,7 @@ App::Wax - Helper library for wax
 
 =head1 DESCRIPTION
 
-C<App::Wax> is the helper library for wax, a simple command-line program that runs
+C<App::Wax> is the helper library for L<wax>, a simple command-line program that runs
 other command-line programs and converts their URI arguments to file paths.
 
 See the L<wax> documentation for more details.
@@ -206,11 +206,11 @@ See the L<wax> documentation for more details.
 Attributes are fields that can optionally be set in the C<App::Wax> constructor,
 and get/set by invoking the corresponding getter/setter methods (which have the
 same names as the constructor fields) after the C<App::Wax>
-object has been initialized. Attributes can be initalized with a hash or hash ref e.g.
+object has been initialized. Attributes can be initialized with a hash or hash ref e.g.
 
     my $wax = App::Wax->new(debug => 1);
     $wax->timeout(60);
-    $wax->run(\@ARGV);
+    exit $wax->run(\@ARGV);
 
 =head2 app_name([ $name ])
 
@@ -253,8 +253,8 @@ Getter for the L<MIME::Types> instance used to map the L<"content_type"> to an e
 
 =head2 run($argv)
 
-Takes a reference to a list of C<@ARGV>-style arguments and runs the specified command with substituted URIs.
-Returns the command's exit code.
+Takes a reference to a list of C<@ARGV>-style arguments and runs the specified command with temporary filenames
+substituted for URIs. Returns the command's exit code.
 
 =head2 uri_to_path($uri)
 
@@ -263,11 +263,15 @@ temporary file to which the URI should be mirrored otherwise.
 
 =head2 usage()
 
-Prints a brief usage method and exits.
+Prints a brief usage message and exits.
 
 =head1 EXPORT
 
 None by default.
+
+=head1 VERSION
+
+0.0.2
 
 =head1 SEE ALSO
 
