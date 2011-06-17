@@ -16,11 +16,11 @@ wax - webify your CLI
 
 # DESCRIPTION
 
-`wax` is a simple command-line program that runs other command-line programs and converts their URI arguments to file paths. The remote resources are saved as temporary files, which are cleaned up after the waxed program has exited.
+`wax` is a simple command-line program that runs other command-line programs and converts their URL arguments to file paths. The remote resources are saved as temporary files, which are cleaned up after the waxed program has exited.
 
 # OPTIONS
 
-The following wax options can be supplied before the command name. Subsequent options are passed to the waxed program verbatim, apart from URIs, which are converted to paths to the corresponding temporary files. To exclude args from waxing, pass them after `--` e.g.
+The following wax options can be supplied before the command name. Subsequent options are passed to the waxed program verbatim, apart from URLs, which are converted to paths to the corresponding temporary files. To exclude args from waxing, pass them after `--` e.g.
 
     wax command -f http://www.example.com -- --title http://www.example.com
 
@@ -87,10 +87,10 @@ Then:
 
 # CAVEATS
 
-As with any command-line programs that take URI parameters, care should be taken to ensure that special shell characters are suitably quoted. As a general rule, URIs that contain `&`, `~`, `<`, `>`, `$` &c. should be single- or double-quoted in shells on Unix-like systems, and double-quoted with embedded escapes in Windows `cmd`/`command.exe`-like shells.
+As with any command-line programs that take URL parameters, care should be taken to ensure that special shell characters are suitably quoted. As a general rule, URLs that contain `&`, `~`, `<`, `>`, `$` &c. should be single- or double-quoted in shells on Unix-like systems, and double-quoted with embedded escapes in Windows `cmd`/`command.exe`-like shells.
 
 
-It's worth checking that a program actually needs waxing. Many command-line programs already support URIs:
+It's worth checking that a program actually needs waxing. Many command-line programs already support URLs:
 
     vim http://www.vim.org/
     gedit http://projects.gnome.org/gedit/
