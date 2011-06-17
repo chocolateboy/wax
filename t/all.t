@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 15;
+use Test::More tests => 16;
 
 use_ok('App::Wax');
 
@@ -32,3 +32,5 @@ is $wax->ua->agent, 'Mozilla';
 
 $wax->separator('--nowax');
 is $wax->separator, '--nowax';
+$wax->separator(undef);
+is $wax->separator, undef;

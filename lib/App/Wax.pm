@@ -23,7 +23,7 @@ use MIME::Types;
 use Mouse;
 use URI::Split qw(uri_split);
 
-our $VERSION = '0.2.0';
+our $VERSION = '0.3.0';
 
 has app_name => (
     is      => 'rw',
@@ -47,7 +47,7 @@ has mime_types => (
 
 has separator => (
     is      => 'rw',
-    isa     => 'Str',
+    isa     => 'Maybe[Str]',
     default => SEPARATOR
 );
 
@@ -181,6 +181,8 @@ method run ($argv) {
                 exec('perldoc', $self->app_name);
             } elsif ($arg =~ /^(?:-s|--separator)$/) {
                 $self->separator(shift @$argv);
+            } elsif ($arg =~ /^(?:-S|--no-separator)$/) {
+                $self->separator(undef);
             } elsif ($arg =~ /^(?:-t|--timeout)$/) {
                 $self->timeout(shift @$argv);
             } elsif ($arg =~ /^(?:-u|--user-agent)$/) {
@@ -191,7 +193,7 @@ method run ($argv) {
                 $command = $arg;
                 $wax_options = 0;
             }
-        } elsif ($arg eq $self->separator) {
+        } elsif (defined($self->separator) && ($arg eq $self->separator)) {
             push @command, @$argv;
             last;
         } elsif ($self->is_url($arg)) {
@@ -244,7 +246,7 @@ same names as the constructor fields) after the C<App::Wax>
 object has been initialized. Attributes can be initialized with a hash or hash ref e.g.
 
     my $wax = App::Wax->new(debug => 1);
-    $wax->timeout(60);
+    $wax->timeout(180);
     exit $wax->run(\@ARGV);
 
 =head2 app_name([ $string ])
@@ -258,7 +260,10 @@ Gets or sets the debug flag, used to determine whether to display diagnostic mes
 
 =head2 separator([ $string ])
 
-Gets or sets the separator token used to mark the end of waxable args. Default: C<-->.
+Gets or sets the separator token used to mark the end of waxable options. Default: C<-->.
+
+Setting the separator to C<undef> disables detection of the wax separator token i.e.
+no separator is used to mark the end of waxable options.
 
 =head2 timeout([ $int ])
 
@@ -302,7 +307,7 @@ Getter for the L<MIME::Types> instance used to map the C<content_type> to an ext
 
 =head2 run($argv)
 
-Takes a reference to a list of C<@ARGV>-style arguments and runs the specified command with temporary filenames
+Takes a reference to a list of C<@ARGV> arguments and runs the specified command with temporary filenames
 substituted for URLs. Returns the command's exit code.
 
 =head2 url_to_temp_file($url)
@@ -320,7 +325,7 @@ None by default.
 
 =head1 VERSION
 
-0.2.0
+0.3.0
 
 =head1 SEE ALSO
 
