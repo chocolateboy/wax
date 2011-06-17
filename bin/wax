@@ -21,7 +21,7 @@ wax - webify your CLI
 
 =head1 SYNOPSIS
 
-    $ wax grep needle http://www.haysta.ck
+    $ wax grep -B1 demons http://www.mplayerhq.hu/DOCS/man/en/mplayer.1.txt
     $ wax espeak -f http://www.setec.org/mel.txt
 
     $ alias perldoc="wax perldoc"
