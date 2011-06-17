@@ -18,6 +18,6 @@ requires 'Mouse'                      => '0.93';
 requires 'URI';
 
 install_script 'bin/wax';
-auto_set_repository;
+repository 'https://github.com/chocolateboy/App-Wax';
 
 WriteAll;
