@@ -20,7 +20,7 @@ wax - webify your CLI
 
 # OPTIONS
 
-The following `waa`x options can be supplied before the command name. Subsequent options are passed to the waxed program verbatim, apart from URLs, which are converted to paths to the corresponding temporary files. To exclude args from waxing, pass them after `--` e.g.
+The following `wax` options can be supplied before the command name. Subsequent options are passed to the waxed program verbatim, apart from URLs, which are converted to paths to the corresponding temporary files. To exclude args from waxing, pass them after `--` e.g.
 
     wax command -f http://www.example.com -- --title http://www.example.com
 
