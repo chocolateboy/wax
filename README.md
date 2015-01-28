@@ -1,81 +1,65 @@
-# NAME
+# wax
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+- [NAME](#name)
+- [SYNOPSIS](#synopsis)
+- [DESCRIPTION](#description)
+- [DOCUMENTATION](#documentation)
+- [INSTALL](#install)
+- [UPDATE](#update)
+- [UNINSTALL](#uninstall)
+- [EXAMPLES](#examples)
+  - [grep](#grep)
+  - [espeak](#espeak)
+  - [nman](#nman)
+- [VERSION](#version)
+- [SEE ALSO](#see-also)
+- [AUTHOR](#author)
+- [COPYRIGHT AND LICENSE](#copyright-and-license)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## NAME
 
 wax - webify your CLI
 
-# USAGE
+## SYNOPSIS
 
     wax [OPTIONS] program [OPTIONS] ...
 
-# SYNOPSIS
+## DESCRIPTION
 
-    $ wax grep -B1 demons http://www.mplayerhq.hu/DOCS/man/en/mplayer.1.txt
-    $ wax espeak -f http://www.setec.org/mel.txt
+`wax` is a command-line program which runs other command-line programs and converts their URL
+arguments to file paths. By default, the files are cleaned up after the command has exited.
 
-    $ alias perldoc="wax perldoc"
-    $ perldoc -F "http://www.pair.com/~comdog/brian's_guide.pod"
+As well as adding transparent support for remote resources to commands that don't support them
+natively, `wax` can be used to:
 
-# DESCRIPTION
+- add support for HTTPS (and any other protocols supported by [LWP](https://metacpan.org/pod/LWP)) to programs that only support HTTP
+- add a mirroring layer to network requests (remote resources are only fetched if they have been updated)
+- add a caching layer to network requests (remote resources are only fetched once)
 
-`wax` is a simple command-line program that runs other command-line programs and converts their URL arguments to file paths. The remote resources are saved as temporary files, which are cleaned up after the waxed program has exited.
+For more details, see the `wax` [manpage](bin/wax.pod).
 
-# OPTIONS
+## DOCUMENTATION
 
-The following `wax` options can be supplied before the command name. Subsequent options are passed to the waxed program verbatim, apart from URLs, which are converted to paths to the corresponding temporary files. To exclude args from waxing, pass them after `--` e.g.
+* [wax](tree/master/bin/wax.pod)
+* [App::Wax](tree/master/lib/App/Wax.pod)
 
-    wax command -f http://www.example.com -- --title http://www.example.com
+## INSTALL
 
-The separator token can be overridden with the `-s` or `--separator` option e.g.
-
-    wax -s --nowax command -f http://www.example.com --nowax --title http://www.example.com
-
-## -d, --debug
-
-Print diagnostic information to STDERR.
-
-## -?, -h, --help
-
-Display this documentation.
-
-## -s, --separator
-
-Set the token used to mark the end of waxable options. Default: `--`.
-
-Note: the separator token is removed from the list of options passed to the command.
-
-## -S, --no-separator
-
-Disable detection of the `wax` separator token i.e. the default `--` separator is not used to mark the end of waxable options.
-
-## -t, --timeout INTEGER
-
-Set the timeout for HTTP requests in seconds. Default: 60.
-
-## -u, --user-agent STRING
-
-Set the user-agent string for HTTP requests.
-
-# INSTALL
-
-## Recommended
-
-Install [cpanminus](http://search.cpan.org/perldoc?App::cpanminus#INSTALLATION), then:
+Install [cpanminus](http://search.cpan.org/perldoc?App::cpanminus#INSTALLATION) if it's not already installed,
+then:
 
     cpanm App::Wax
 
-## Traditional
-
-Unpack the tarball, then:
-
-    perl Makefile.PL
-    make
-    make test
-    make install
-
-# UPDATE
+## UPDATE
 
     cpanm App::Wax
 
-# UNINSTALL
+## UNINSTALL
 
 Install [pm-uninstall](http://search.cpan.org/perldoc?pm-uninstall) if it's not already installed:
 
@@ -85,37 +69,48 @@ Then:
 
     pm-uninstall App::Wax
 
-# CAVEATS
+## EXAMPLES
 
-As with any command-line programs that take URL parameters, care should be taken to ensure that special shell characters are suitably quoted. As a general rule, URLs that contain `&`, `~`, `<`, `>`, `$` &c. should be single- or double-quoted in shells on Unix-like systems, and double-quoted with embedded escapes in Windows `cmd`/`command.exe`-like shells.
+### grep
 
+    $ wax grep -B1 demons http://www.mplayerhq.hu/DOCS/man/en/mplayer.1.txt
 
-It's worth checking that a program actually needs waxing. Many command-line programs already support URLs:
+### espeak
 
-    vim http://www.vim.org/
-    gedit http://projects.gnome.org/gedit/
-    eog http://upload.wikimedia.org/wikipedia/commons/4/4c/Eye_of_GNOME.png
-    gimp http://upload.wikimedia.org/wikipedia/commons/6/6c/Gimpscreen.png
+    $ alias espeak="wax espeak"
+    $ espeak -f http://www.setec.org/mel.txt
 
-&c.
+### nman
 
-# VERSION
+```bash
+#!/bin/sh
 
-0.3.1
+# nman - Node.js manpage viewer
 
-# SEE ALSO
+node_version=${NODE_VERSION:-`node --version`}
+docroot="https://cdn.rawgit.com/joyent/node/$node_version-release/doc/api"
 
-* [rlwrap](http://utopia.knoware.nl/~hlub/uck/rlwrap/rlwrap.html)
-* [sshfs](http://fuse.sourceforge.net/sshfs.html)
-* [zsh completion script](https://github.com/chocolateboy/App-Wax/wiki/Zsh-completion-script)
+# https://stackoverflow.com/a/7603703
+wax --cache pandoc --standalone --from markdown --to man "$docroot/$1.markdown" | man -l -
+```
 
-# AUTHOR
+## VERSION
 
-[chocolateboy](mailto:chocolate@cpan.org)
+1.0.0
 
-# COPYRIGHT AND LICENSE
+## SEE ALSO
 
-Copyright 2010-2011 [chocolateboy](mailto:chocolate@cpan.org).
+- [rlwrap](http://utopia.knoware.nl/~hlub/uck/rlwrap/)
+- [sshfs](http://fuse.sourceforge.net/sshfs.html)
+- [zsh completion script](https://github.com/chocolateboy/App-Wax/wiki/Zsh-completion-script)
+
+## AUTHOR
+
+chocolateboy ([chocolate@cpan.org](mailto:chocolate@cpan.org))
+
+## COPYRIGHT AND LICENSE
+
+Copyright (C) 2010-2015 by chocolateboy
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.10.1 or,

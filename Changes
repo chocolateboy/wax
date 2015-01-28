@@ -1,13 +1,28 @@
 Revision history for Perl extension App::Wax.
 
+1.0.0 TBC
+
+    - breaking changes:
+        - the separator is now opt-in i.e. `--` is no longer the default separator
+            - as a result the -S/--no-separator option has been removed
+        - -d/--debug is now -v/--verbose
+        - -d is now short for --dir/--directory
+    - new --cache option: remote resources are only fetched if they have been updated
+    - new --mirror option: remote resources are only fetched once
+    - parallelize downloads
+    - improve tests
+
 0.3.1 Fri Jun 17 21:16:43 2011
+
     - docfixen
     - rm README.md from CPAN
 
 0.3.0 Fri Jun 17 19:29:40 2011
+
     - add -S/--no-separator option, allowing detection of the "stop waxing" token to be disabled
 
 0.2.0 Fri Jun 17 18:23:13 2011
+
     - fix user-agent and timeout accessors
     - increase default timeout to 60 seconds
     - add -s/--separator option to allow the "stop waxing" token to be customized
@@ -17,12 +32,15 @@ Revision history for Perl extension App::Wax.
     - add README.md
 
 0.1.0 Fri Jun 17 14:28:28 2011
+
     - fix extension handling
     - better error handling
     - s/URI/URL/g
 
 0.0.2 Fri Jun 17 05:11:59 2011
+
     - docfixen
 
 0.0.1 Thu Jun 16 23:59:31 2011
+
     - initial release
