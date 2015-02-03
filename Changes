@@ -1,6 +1,6 @@
 Revision history for Perl extension App::Wax.
 
-1.0.0 TBC
+1.0.0 Tue Feb 3 23:21:47 2015
 
     - breaking changes:
         - the separator is now opt-in i.e. `--` is no longer the default separator
