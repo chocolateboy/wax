@@ -6,7 +6,6 @@
 - [NAME](#name)
 - [SYNOPSIS](#synopsis)
 - [DESCRIPTION](#description)
-- [DOCUMENTATION](#documentation)
 - [INSTALLATION](#installation)
   - [INSTALL](#install)
   - [UPDATE](#update)
