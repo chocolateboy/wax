@@ -150,7 +150,7 @@ URLs e.g:
 
 =head1 AUTHOR
 
-chocolateboy (<chocolate@cpan.org>)
+chocolateboy <chocolate@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
