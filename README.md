@@ -44,11 +44,6 @@ natively, `wax` can be used to:
 
 For more details, see the `wax` [manpage](bin/wax.pod).
 
-## DOCUMENTATION
-
-* [wax](bin/wax.pod)
-* [App::Wax](lib/App/Wax.pod)
-
 ## INSTALLATION
 
 ### INSTALL
