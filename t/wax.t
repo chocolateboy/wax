@@ -37,7 +37,9 @@ mock(
     method ($url) {
         my $keep = $self->keep;
         my $filename = $keep ? $FILENAME_KEEP{$url} : $FILENAME_TEMP{$url};
-        return [ $filename, undef ];
+        my @resolved = ($filename, undef);
+
+        return wantarray ? @resolved : \@resolved;
     }
 );
 

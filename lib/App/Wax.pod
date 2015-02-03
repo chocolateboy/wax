@@ -159,10 +159,11 @@ Returns a string representation of the supplied command.
 
 =head2 resolve
 
-B<Signature>: $url: Str -> [ $path: Str, $error: Maybe[Str] ]
+B<Signature>: $url: Str -> ($path: Str, $error: Maybe[Str]): List|ArrayRef
 
-Takes a URL and returns an ArrayRef containing the file path corresponding to
-the URL and an optional error message if the download or I/O failed.
+Takes a URL and returns a list (list context) or ArrayRef (scalar context)
+containing the file path corresponding to the URL, and an optional error
+message if the download or I/O failed.
 
 The path is returned by L<"resolve_keep"> if L<"keep"> is true,
 or L<"resolve_temp"> otherwise.

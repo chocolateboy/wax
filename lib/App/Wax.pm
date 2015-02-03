@@ -264,7 +264,7 @@ method render ($args) {
 }
 
 method resolve ($url) {
-    my ($error, $filename);
+    my ($error, $filename, @resolved);
 
     if ($self->keep) {
         ($filename, $error) = $self->resolve_keep($url);
@@ -273,8 +273,9 @@ method resolve ($url) {
     }
 
     $error ||= $self->download($url, $filename);
+    @resolved = ($filename, $error);
 
-    return [ $filename, $error ];
+    return wantarray ? @resolved : \@resolved;
 }
 
 method resolve_keep ($url) {
@@ -404,7 +405,7 @@ method run ($argv) {
         } else {
             $self->debug('jobs: %d', scalar(@resolve));
 
-            my @resolved = parallel_map { [ $_->[0], @{ scalar $self->resolve($_->[1]) } ] } @resolve;
+            my @resolved = parallel_map { [ $_->[0], $self->resolve($_->[1]) ] } @resolve;
 
             for my $resolved (@resolved) {
                 $error ||= $self->_handle($resolved, \@command, \@cleanup);
