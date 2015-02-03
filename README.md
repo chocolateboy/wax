@@ -7,9 +7,10 @@
 - [SYNOPSIS](#synopsis)
 - [DESCRIPTION](#description)
 - [DOCUMENTATION](#documentation)
-- [INSTALL](#install)
-- [UPDATE](#update)
-- [UNINSTALL](#uninstall)
+- [INSTALLATION](#installation)
+  - [INSTALL](#install)
+  - [UPDATE](#update)
+  - [UNINSTALL](#uninstall)
 - [EXAMPLES](#examples)
   - [grep](#grep)
   - [espeak](#espeak)
@@ -48,18 +49,20 @@ For more details, see the `wax` [manpage](bin/wax.pod).
 * [wax](tree/master/bin/wax.pod)
 * [App::Wax](tree/master/lib/App/Wax.pod)
 
-## INSTALL
+## INSTALLATION
+
+### INSTALL
 
 Install [cpanminus](http://search.cpan.org/perldoc?App::cpanminus#INSTALLATION) if it's not already installed,
 then:
 
     cpanm App::Wax
 
-## UPDATE
+### UPDATE
 
     cpanm App::Wax
 
-## UNINSTALL
+### UNINSTALL
 
 Install [pm-uninstall](http://search.cpan.org/perldoc?pm-uninstall) if it's not already installed:
 
@@ -106,7 +109,7 @@ wax --cache pandoc --standalone --from markdown --to man "$docroot/$1.markdown" 
 
 ## AUTHOR
 
-chocolateboy ([chocolate@cpan.org](mailto:chocolate@cpan.org))
+[chocolateboy](mailto:chocolate@cpan.org)
 
 ## COPYRIGHT AND LICENSE
 

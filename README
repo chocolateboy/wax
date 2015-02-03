@@ -36,20 +36,20 @@ DOCUMENTATION
 -   wax
 -   App::Wax
 
+INSTALLATION
+------------
+
 INSTALL
--------
 
 Install cpanminus if it's not already installed, then:
 
     cpanm App::Wax
 
 UPDATE
-------
 
     cpanm App::Wax
 
 UNINSTALL
----------
 
 Install pm-uninstall if it's not already installed:
 
