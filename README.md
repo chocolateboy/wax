@@ -41,7 +41,7 @@ natively, `wax` can be used to:
 - add a mirroring layer to network requests (remote resources are only fetched if they have been updated)
 - add a caching layer to network requests (remote resources are only fetched once)
 
-For more details, see the `wax` [manpage](bin/wax.pod).
+For more details, see the `wax` [man page](bin/wax.pod).
 
 ## INSTALLATION
 
@@ -82,7 +82,7 @@ Then:
 ```bash
 #!/bin/sh
 
-# nman - Node.js manpage viewer
+# nman - Node.js man-page viewer
 
 node_version=${NODE_VERSION:-`node --version`}
 docroot="https://cdn.rawgit.com/joyent/node/$node_version-release/doc/api"

@@ -28,7 +28,7 @@ that don't support them natively, wax can be used to:
 -   add a caching layer to network requests (remote resources are only
     fetched once)
 
-For more details, see the wax manpage.
+For more details, see the wax man page.
 
 INSTALLATION
 ------------
@@ -69,7 +69,7 @@ nman:
 
     #!/bin/sh
 
-    # nman - Node.js manpage viewer
+    # nman - Node.js man-page viewer
 
     node_version=${NODE_VERSION:-`node --version`}
     docroot="https://cdn.rawgit.com/joyent/node/$node_version-release/doc/api"
