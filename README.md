@@ -46,8 +46,8 @@ For more details, see the `wax` [manpage](bin/wax.pod).
 
 ## DOCUMENTATION
 
-* [wax](tree/master/bin/wax.pod)
-* [App::Wax](tree/master/lib/App/Wax.pod)
+* [wax](bin/wax.pod)
+* [App::Wax](lib/App/Wax.pod)
 
 ## INSTALLATION
 
