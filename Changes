@@ -1,6 +1,10 @@
 Revision history for Perl extension App::Wax.
 
-1.0.1 TBC
+1.0.2 Wed Feb 4 22:04:09 2015
+
+    - fix release date
+
+1.0.1 Wed Feb 4 21:41:59 2015
 
     - fix usage/help display
     - doc/code nitfixen

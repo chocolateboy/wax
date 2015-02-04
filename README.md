@@ -93,7 +93,7 @@ wax --cache pandoc --standalone --from markdown --to man "$docroot/$1.markdown" 
 
 ## VERSION
 
-1.0.1
+1.0.2
 
 ## SEE ALSO
 
