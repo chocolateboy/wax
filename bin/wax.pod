@@ -53,7 +53,7 @@ If the local file no longer exists, the resource will be re-downloaded.
 Note: by default, files are saved to the system's temp directory, which is typically cleared when
 the system restarts. To save files to another directory, use the C<--directory> option.
 
-=head2 -d, --dir, --directory
+=head2 -d, --dir, --directory STRING
 
 Specify the directory to download files to. Default: the system's
 L<temp directory|https://en.wikipedia.org/wiki/Temporary_folder>.
@@ -71,7 +71,7 @@ available).
 
 If the local file no longer exists, the resource will be re-downloaded.
 
-=head2 -s, --separator
+=head2 -s, --separator STRING
 
 Set the token used to mark the end of waxable options e.g.:
 
