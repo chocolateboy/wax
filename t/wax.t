@@ -35,8 +35,7 @@ func wax_ok ($args, $want) {
 mock(
     'App::Wax::resolve',
     method ($url) {
-        my $keep = $self->keep;
-        my $filename = $keep ? $FILENAME_KEEP{$url} : $FILENAME_TEMP{$url};
+        my $filename = $self->keep ? $FILENAME_KEEP{$url} : $FILENAME_TEMP{$url};
         my @resolved = ($filename, undef);
 
         return wantarray ? @resolved : \@resolved;
