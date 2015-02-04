@@ -37,8 +37,7 @@ the command verbatim, apart from URLs, which are converted to paths to the corre
 files. URL arguments can be excluded from the conversion process by supplying a separator token.
 Arguments after this are no longer processed by C<wax> and are passed through verbatim e.g.:
 
-    wax --separator --no-wax command -f http://www.example.com --no-wax --title http://www.example.com
-    wax -s -- command -f http://www.example.com -- --title http://www.example.com
+    wax --cache --separator --no-wax cmd http://example.com/foo --no-wax --referrer http://example.com
 
 Note that the C<--cache> and C<--mirror> options are mutually exclusive i.e. only one (or neither)
 should be supplied. Supplying both will cause C<wax> to terminate with an error.
@@ -66,7 +65,7 @@ Display this documentation.
 
 Like the C<--cache> option, this keeps the downloaded file(s) after the command exits.
 In addition, each invocation issues a HEAD request to see if each resource has been updated.
-If so, the latest version is downloaded, otherwise the cached version is used (if still
+If so, the latest version is downloaded; otherwise, the cached version is used (if still
 available).
 
 If the local file no longer exists, the resource will be re-downloaded.
@@ -75,9 +74,7 @@ If the local file no longer exists, the resource will be re-downloaded.
 
 Set the token used to mark the end of waxable options e.g.:
 
-    wax -s -- ...
-    wax -s --no-wax ...
-    wax -s SEPARATOR ...
+    wax --cache --separator :: cmd http://example.com/foo :: --referrer http://example.com
 
 Note: the separator token is removed from the list of options passed to the command.
 
