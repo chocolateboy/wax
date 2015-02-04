@@ -1,5 +1,4 @@
 bin/wax
-bin/wax.pod
 Changes
 inc/Module/Install.pm
 inc/Module/Install/Base.pm

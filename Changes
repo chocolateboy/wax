@@ -1,5 +1,9 @@
 Revision history for Perl extension App::Wax.
 
+1.0.3 Wed Feb 4 22:26:26 2015
+
+    - remove duplicate POD from CPAN
+
 1.0.2 Wed Feb 4 22:04:09 2015
 
     - fix release date
