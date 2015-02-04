@@ -2,7 +2,8 @@ Revision history for Perl extension App::Wax.
 
 1.0.1 TBC
 
-    - docfixen
+    - fix usage/help display
+    - doc/code nitfixen
 
 1.0.0 Tue Feb 3 23:21:47 2015
 
@@ -11,7 +12,7 @@ Revision history for Perl extension App::Wax.
             - as a result the -S/--no-separator option has been removed
         - -d/--debug is now -v/--verbose
         - -d is now short for --dir/--directory
-    - new --cache option: remote resources are only fetched if they have been updated
+    - new --cache option: remote resources are only fetched if they've been updated
     - new --mirror option: remote resources are only fetched once
     - parallelize downloads
     - improve tests

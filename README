@@ -24,7 +24,7 @@ that don't support them natively, wax can be used to:
 -   add support for HTTPS (and any other protocols supported by LWP) to
     programs that only support HTTP
 -   add a mirroring layer to network requests (remote resources are only
-    fetched if they have been updated)
+    fetched if they've been updated)
 -   add a caching layer to network requests (remote resources are only
     fetched once)
 
@@ -80,7 +80,7 @@ nman:
 VERSION
 -------
 
-1.0.0
+1.0.1
 
 SEE ALSO
 --------

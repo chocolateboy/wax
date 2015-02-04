@@ -2,6 +2,22 @@ package App::Wax;
 
 use 5.008008;
 
+use Digest::SHA qw(sha1_hex);
+use File::Slurp qw(read_file write_file);
+use File::Spec;
+use File::Temp;
+use IPC::System::Simple qw(EXIT_ANY $EXITVAL systemx);
+use LWP::UserAgent;
+use Method::Signatures::Simple;
+use MIME::Types;
+use Mouse;
+use Parallel::parallel_map qw(parallel_map);
+use Pod::Usage qw(pod2usage);
+use Try::Tiny qw(try catch);
+use URI::Split qw(uri_split);
+
+our $VERSION = '1.0.1';
+
 # defaults
 use constant {
     CACHE      => 0,
@@ -24,22 +40,6 @@ use constant {
     E_NO_COMMAND        => -5,
     E_INVALID_OPTION    => -6,
 };
-
-use Digest::SHA qw(sha1_hex);
-use File::Slurp qw(read_file write_file);
-use File::Spec;
-use File::Temp;
-use IPC::System::Simple qw(EXIT_ANY $EXITVAL systemx);
-use LWP::UserAgent;
-use Method::Signatures::Simple;
-use MIME::Types;
-use Mouse;
-use Parallel::parallel_map qw(parallel_map);
-use Pod::Usage qw(pod2usage);
-use Try::Tiny qw(try catch);
-use URI::Split qw(uri_split);
-
-our $VERSION = '1.0.0';
 
 has app_name => (
     is      => 'rw',
@@ -327,7 +327,7 @@ method run ($argv) {
     unless (@argv) {
         pod2usage(
             -exitval => E_NO_ARGUMENTS,
-            -input   => "$0.pod",
+            -input   => $0,
             -msg     => 'no arguments supplied',
             -verbose => 0,
         );
@@ -399,9 +399,9 @@ method run ($argv) {
     if (@resolve) {
         if (@resolve == 1) {
             my ($index, $url) = @{ $resolve[0] };
-            my $resolved = $self->resolve($url);
+            my @resolved = $self->resolve($url);
 
-            $error = $self->_handle([ $index, @$resolved ], \@command, \@cleanup);
+            $error = $self->_handle([ $index, @resolved ], \@command, \@cleanup);
         } else {
             $self->debug('jobs: %d', scalar(@resolve));
 

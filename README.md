@@ -38,7 +38,7 @@ As well as adding transparent support for remote resources to commands that don'
 natively, `wax` can be used to:
 
 - add support for HTTPS (and any other protocols supported by [LWP](https://metacpan.org/pod/LWP)) to programs that only support HTTP
-- add a mirroring layer to network requests (remote resources are only fetched if they have been updated)
+- add a mirroring layer to network requests (remote resources are only fetched if they've been updated)
 - add a caching layer to network requests (remote resources are only fetched once)
 
 For more details, see the `wax` [man page](bin/wax.pod).
@@ -93,11 +93,11 @@ wax --cache pandoc --standalone --from markdown --to man "$docroot/$1.markdown" 
 
 ## VERSION
 
-1.0.0
+1.0.1
 
 ## SEE ALSO
 
-- [rlwrap](http://utopia.knoware.nl/~hlub/uck/rlwrap/)
+- [rlwrap](http://utopia.knoware.nl/~hlub/uck/rlwrap/#rlwrap)
 - [sshfs](http://fuse.sourceforge.net/sshfs.html)
 - [zsh completion script](https://github.com/chocolateboy/App-Wax/wiki/Zsh-completion-script)
 
