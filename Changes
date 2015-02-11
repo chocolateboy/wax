@@ -1,5 +1,9 @@
 Revision history for Perl extension App::Wax.
 
+1.0.4 TBC
+
+    - fix changelog nit
+
 1.0.3 Wed Feb 4 22:26:26 2015
 
     - remove duplicate POD from CPAN
@@ -20,8 +24,8 @@ Revision history for Perl extension App::Wax.
             - as a result the -S/--no-separator option has been removed
         - -d/--debug is now -v/--verbose
         - -d is now short for --dir/--directory
-    - new --cache option: remote resources are only fetched if they've been updated
-    - new --mirror option: remote resources are only fetched once
+    - new --cache option: remote resources are only fetched once
+    - new --mirror option: remote resources are only fetched if they've been updated
     - parallelize downloads
     - improve tests
 
