@@ -126,6 +126,7 @@ has verbose => (
     trigger => method ($verbose) { $| = 1 }, # unbuffer output
 );
 
+# lazy constructor for the default LWP::UserAgent instance
 method _build_lwp_user_agent {
     LWP::UserAgent->new(
         env_proxy => ENV_PROXY,
@@ -134,6 +135,8 @@ method _build_lwp_user_agent {
     )
 }
 
+# set `keep` to true if --cache or --mirror are set,
+# but raise an error if both are set
 method _check_keep {
     if ($self->cache && $self->mirror) {
         $self->log(ERROR => "--cache and --mirror can't be used together");
@@ -143,6 +146,7 @@ method _check_keep {
     }
 }
 
+# remove temporary files
 method _unlink ($unlink) {
     for my $filename (@$unlink) {
         chmod 0600, $filename; # borrowed from File::Temp (may be needed on Windows)
@@ -193,6 +197,16 @@ method download ($url, $filename) {
     }
 
     return $error;
+}
+
+# helper for `render`: escape/quote a shell argument on POSIX shells
+func _escape ($arg) {
+    # https://stackoverflow.com/a/1250279
+    # https://github.com/boazy/any-shell-escape/issues/1#issuecomment-36226734
+    $arg =~ s!('{1,})!'"$1"'!g;
+    $arg = "'$arg'";
+    $arg =~ s{^''|''$}{}g;
+    return $arg;
 }
 
 method log ($level, $template, @args) {
@@ -250,6 +264,9 @@ method debug ($template, @args) {
     }
 }
 
+# perform housekeeping after a download: replace the placeholder
+# with the file path; push the path onto the delete list if
+# it's a temporary file; and log any errors
 method _handle ($resolved, $command, $unlink) {
     my ($index, $filename, $error) = @$resolved;
 
@@ -267,8 +284,16 @@ method _handle ($resolved, $command, $unlink) {
     }
 }
 
+# this is purely for diagnostic purposes i.e. there's no guarantee
+# that the dumped command can be used as a command line. a better
+# (but still imperfect/incomplete) implementation would require at
+# least two extra modules: Win32::ShellQuote and String::ShellQuote:
+# https://rt.cpan.org/Public/Bug/Display.html?id=37348
+#
+# XXX looks like Shell::Escape is... unavailable:
+# http://search.cpan.org/search?query=shell+escape&mode=all
 method render ($args) {
-    return join(' ', map { /^$|\s/ ? "'$_'" : $_ } @$args);
+    return join(' ', map { /[^0-9A-Za-z+,.\/:=\@_-]/ ? _escape($_) : $_ } @$args);
 }
 
 method resolve ($url) {
@@ -389,7 +414,7 @@ method run ($argv) {
             }
 
             $self->debug('url: %s', $arg);
-            push @command, undef;
+            push @command, $arg;
             push @resolve, [ $#command, $arg ];
         } else {
             push @command, $arg;

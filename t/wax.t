@@ -7,7 +7,7 @@ use App::Wax;
 use Method::Signatures::Simple;
 use Test::Differences qw(eq_or_diff);
 use Test::Fatal qw(exception);
-use Test::More tests => 17;
+use Test::More tests => 21;
 use Test::TinyMocker qw(mock);
 
 my @FILENAMES     = ('1.json', '2.html');
@@ -117,8 +117,18 @@ wax_ok(
 ########################### cache ###########################
 
 wax_ok(
+    "-c cmd --foo $URL[0]",
+    "cmd --foo $KEEP[0]"
+);
+
+wax_ok(
     "--cache cmd --foo $URL[0]",
     "cmd --foo $KEEP[0]"
+);
+
+wax_ok(
+    "-c cmd --foo $URL[0] -bar --baz $URL[1]",
+    "cmd --foo $KEEP[0] -bar --baz $KEEP[1]"
 );
 
 wax_ok(
@@ -129,8 +139,18 @@ wax_ok(
 ########################### mirror ###########################
 
 wax_ok(
+    "-m cmd --foo $URL[0]",
+    "cmd --foo $KEEP[0]"
+);
+
+wax_ok(
     "--mirror cmd --foo $URL[0]",
     "cmd --foo $KEEP[0]"
+);
+
+wax_ok(
+    "-m cmd --foo $URL[0] -bar --baz $URL[1]",
+    "cmd --foo $KEEP[0] -bar --baz $KEEP[1]"
 );
 
 wax_ok(
