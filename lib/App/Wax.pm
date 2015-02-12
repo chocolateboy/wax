@@ -143,6 +143,14 @@ method _check_keep {
     }
 }
 
+method _unlink ($unlink) {
+    for my $filename (@$unlink) {
+        chmod 0600, $filename; # borrowed from File::Temp (may be needed on Windows)
+        $self->debug('removing: %s', $filename);
+        unlink($filename) || $self->log(WARN => "Can't unlink %s: %s", $filename, $!);
+    }
+}
+
 method content_type ($url) {
     my $response = $self->lwp_user_agent->head($url);
     my $content_type = '';
@@ -242,13 +250,13 @@ method debug ($template, @args) {
     }
 }
 
-method _handle ($resolved, $command, $cleanup) {
+method _handle ($resolved, $command, $unlink) {
     my ($index, $filename, $error) = @$resolved;
 
     $command->[$index] = $filename;
 
     unless ($self->keep) {
-        push @$cleanup, $filename;
+        push @$unlink, $filename;
     }
 
     if ($error) {
@@ -394,21 +402,21 @@ method run ($argv) {
     }
 
     my $error = 0;
-    my @cleanup;
+    my @unlink;
 
     if (@resolve) {
         if (@resolve == 1) {
             my ($index, $url) = @{ $resolve[0] };
             my @resolved = $self->resolve($url);
 
-            $error = $self->_handle([ $index, @resolved ], \@command, \@cleanup);
+            $error = $self->_handle([ $index, @resolved ], \@command, \@unlink);
         } else {
             $self->debug('jobs: %d', scalar(@resolve));
 
             my @resolved = parallel_map { [ $_->[0], $self->resolve($_->[1]) ] } @resolve;
 
             for my $resolved (@resolved) {
-                $error ||= $self->_handle($resolved, \@command, \@cleanup);
+                $error ||= $self->_handle($resolved, \@command, \@unlink);
             }
         }
     }
@@ -417,13 +425,14 @@ method run ($argv) {
 
     if ($error) {
         $self->debug('exit code: %d', $error);
+        $self->_unlink(\@unlink);
         return $error;
     } elsif ($test) {
         return \@command;
     } else {
         try {
-            # XXX hack to remove the <error> in /path/to/App/Wax.pm line <line>
-            # noise
+            # XXX hack to remove the "<error> in /path/to/App/Wax.pm line <line>"
+            # noise. we just want the error message
             no warnings qw(redefine);
             local *IPC::System::Simple::croak = sub { die @_, $/ };
             systemx(EXIT_ANY, @command);
@@ -432,13 +441,9 @@ method run ($argv) {
             $self->log(ERROR => $_);
         };
 
-        for my $filename (@cleanup) {
-            chmod 0600, $filename; # borrowed from File::Temp (may be needed on Windows)
-            $self->debug('removing: %s', $filename);
-            unlink($filename) || $self->log(WARN => "Can't unlink %s: %s", $filename, $!);
-        }
-
         $self->debug('exit code: %d', $EXITVAL);
+        $self->_unlink(\@unlink);
+
         return $EXITVAL;
     }
 }
