@@ -1,6 +1,6 @@
 Revision history for Perl extension App::Wax.
 
-1.0.4 TBC
+1.0.4 Thu Feb 12 19:04:07 2015
 
     - make sure temp files are removed on error
     - changelog: fix --cache/--mirror descriptions
