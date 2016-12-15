@@ -82,13 +82,10 @@ Then:
 ```bash
 #!/bin/sh
 
-# nman - Node.js man-page viewer
-
 node_version=${NODE_VERSION:-`node --version`}
-docroot="https://cdn.rawgit.com/joyent/node/$node_version-release/doc/api"
-
-# https://stackoverflow.com/a/7603703
-wax --cache pandoc --standalone --from markdown --to man "$docroot/$1.markdown" | man -l -
+node_bin=$(basename $(readlink -f $(which node)))
+docroot="https://cdn.rawgit.com/nodejs/node/$node_version/doc/api"
+wax --cache pandoc --standalone --from markdown --to man "$docroot/$1.md" | man -l -
 ```
 
 ## VERSION
