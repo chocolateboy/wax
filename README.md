@@ -32,7 +32,7 @@ wax - webify your CLI
 ## DESCRIPTION
 
 `wax` is a command-line program which runs other command-line programs and converts their URL
-arguments to file paths. By default, the files are removed after the command has exited.
+arguments to local file paths. By default, the files are removed after the command has exited.
 
 As well as adding transparent support for remote resources to commands that don't support them
 natively, `wax` can be used to:

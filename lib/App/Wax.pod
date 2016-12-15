@@ -11,7 +11,7 @@ App::Wax - webify your CLI
 =head1 DESCRIPTION
 
 C<App::Wax> is the helper library for L<wax>, a command-line program which runs
-other command-line programs and converts their URL arguments to file paths.
+other command-line programs and converts their URL arguments to local file paths.
 
 See the L<wax> documentation for more details.
 

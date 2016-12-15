@@ -15,7 +15,7 @@ DESCRIPTION
 -----------
 
 wax is a command-line program which runs other command-line programs and
-converts their URL arguments to file paths. By default, the files are
+converts their URL arguments to local file paths. By default, the files are
 removed after the command has exited.
 
 As well as adding transparent support for remote resources to commands
