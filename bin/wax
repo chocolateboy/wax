@@ -58,7 +58,7 @@ should be supplied. Supplying both will cause C<wax> to terminate with an error.
 Don't remove the downloaded file(s) after the command exits. Subsequent invocations will
 resolve the URL(s) to the cached files(s) (if still available) rather than hitting the network.
 
-If a local file no longer exists, the resource will be re-downloaded.
+If a local file no longer exists, the resource is re-downloaded.
 
 Note: by default, files are saved to the system's temp directory, which is typically cleared when
 the system restarts. To save files to another directory, use the C<--directory> option.
@@ -75,11 +75,11 @@ Display this documentation.
 =head2 -m, --mirror
 
 Like the C<--cache> option, this keeps the downloaded file(s) after the command exits.
-In addition, each invocation issues a HEAD request to see if each resource has been updated.
+In addition, a HEAD request is issued for each resource to see if it has been updated.
 If so, the latest version is downloaded; otherwise, the cached version is used (if still
 available).
 
-If a local file no longer exists, the resource will be re-downloaded.
+If a local file no longer exists, the resource is re-downloaded.
 
 =head2 -s, --separator STRING
 
