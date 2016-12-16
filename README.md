@@ -47,7 +47,7 @@ For more details, see the `wax` [man page](bin/wax.pod).
 
 ### INSTALL
 
-Install [cpanminus](http://search.cpan.org/perldoc?App::cpanminus#INSTALLATION) if it's not already installed,
+Install [cpanminus](https://github.com/miyagawa/cpanminus#installation) if it's not already installed,
 then:
 
     cpanm App::Wax
@@ -58,13 +58,7 @@ then:
 
 ### UNINSTALL
 
-Install [pm-uninstall](http://search.cpan.org/perldoc?pm-uninstall) if it's not already installed:
-
-    cpanm App::pmuninstall
-
-Then:
-
-    pm-uninstall App::Wax
+    cpanm --uninstall App::Wax
 
 ## EXAMPLES
 

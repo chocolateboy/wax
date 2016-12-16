@@ -45,13 +45,7 @@ UPDATE
 
 UNINSTALL
 
-Install pm-uninstall if it's not already installed:
-
-    cpanm App::pmuninstall
-
-Then:
-
-    pm-uninstall App::Wax
+    cpanm --uninstall App::Wax
 
 EXAMPLES
 --------
