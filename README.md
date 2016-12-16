@@ -85,7 +85,6 @@ Node.js man-page viewer
 #!/bin/sh
 
 node_version=${NODE_VERSION:-`node --version`}
-node_bin=$(basename $(readlink -f $(which node)))
 docroot="https://cdn.rawgit.com/nodejs/node/$node_version/doc/api"
 wax --cache pandoc --standalone --from markdown --to man "$docroot/$1.md" | man -l -
 ```
