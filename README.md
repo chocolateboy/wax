@@ -79,6 +79,8 @@ Then:
 
 ### nman
 
+Node.js man-page viewer
+
 ```bash
 #!/bin/sh
 
