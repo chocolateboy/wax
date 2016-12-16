@@ -88,7 +88,7 @@ wax -D --cache pandoc --standalone --from markdown --to man "$docroot/$1.md" | m
 
 ## VERSION
 
-1.0.5
+1.1.0
 
 ## SEE ALSO
 
@@ -102,7 +102,7 @@ wax -D --cache pandoc --standalone --from markdown --to man "$docroot/$1.md" | m
 
 ## COPYRIGHT AND LICENSE
 
-Copyright (C) 2010-2015 by chocolateboy
+Copyright (C) 2010-2016 by chocolateboy
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.10.1 or,

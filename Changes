@@ -1,5 +1,11 @@
 Revision history for Perl extension App::Wax.
 
+1.1.0 Fri 16 Dec 23:15:52 2016
+
+    - add -D option equivalent to -d "${XDG_CACHE_HOME:-$HOME/.cache}/wax"
+    - automatically create the -d/-D directories if their parent directories exist
+      (otherwise raise an error)
+
 1.0.5 Mon Feb 16 20:52:30 2015
 
     - fix logging of unresolved URLs

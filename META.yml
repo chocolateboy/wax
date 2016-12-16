@@ -42,4 +42,4 @@ resources:
   bugtracker: https://github.com/chocolateboy/App-Wax/issues
   license: http://dev.perl.org/licenses/
   repository: https://github.com/chocolateboy/App-Wax
-version: 1.0.5
+version: 1.1.0
