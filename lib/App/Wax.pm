@@ -27,7 +27,7 @@ use constant {
     NAME       => 'wax',
     TEMPLATE   => 'XXXXXXXX',
     TIMEOUT    => 60,
-    USER_AGENT => 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:35.0) Gecko/20100101 Firefox/35.0',
+    USER_AGENT => 'Mozilla/5.0 (X11; Linux x86_64; rv:50.0) Gecko/20100101 Firefox/50.0',
     VERBOSE    => 0,
 };
 
@@ -59,6 +59,7 @@ has directory => (
     isa       => 'Str',
     predicate => 'has_directory',
     required  => 0,
+    trigger   => method ($dir) { $self->debug("directory: $dir") },
 );
 
 has keep => (
@@ -379,6 +380,10 @@ method run ($argv) {
                 $self->cache(1);
             } elsif ($arg =~ /^(?:-d|--dir|--directory)$/) {
                 $self->directory(shift @argv);
+            } elsif ($arg eq '-D') {
+                # "${XDG_CACHE_HOME:-$HOME/.cache}/wax"
+                require File::BaseDir;
+                $self->directory(File::BaseDir::cache_home(NAME));
             } elsif ($arg =~ /^(?:-v|--verbose)$/) {
                 $self->verbose(1);
             } elsif ($arg =~ /^(?:-[?h]|--help)$/) {

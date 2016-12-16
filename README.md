@@ -1,5 +1,8 @@
 # wax
 
+[![Build Status](https://travis-ci.org/chocolateboy/App-Wax.svg?branch=master)](https://travis-ci.org/chocolateboy/App-Wax)
+[![CPAN](https://img.shields.io/cpan/v/App-Wax.svg)](http://search.cpan.org/dist/App-Wax/)
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
@@ -41,7 +44,7 @@ natively, `wax` can be used to:
 - add a mirroring layer to network requests (remote resources are only fetched if they've been updated)
 - add a caching layer to network requests (remote resources are only fetched once)
 
-For more details, see the `wax` [man page](bin/wax.pod).
+For more details, see the `wax` [man page](bin/README.md).
 
 ## INSTALLATION
 

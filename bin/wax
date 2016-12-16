@@ -61,12 +61,17 @@ resolve the URL(s) to the cached files(s) (if still available) rather than hitti
 If a local file no longer exists, the resource is re-downloaded.
 
 Note: by default, files are saved to the system's temp directory, which is typically cleared when
-the system restarts. To save files to another directory, use the C<--directory> option.
+the system restarts. To save files to another directory, use the C<-D> or C<--directory> option.
 
 =head2 -d, --dir, --directory STRING
 
 Specify the directory to download files to. Default: the system's
 L<temp directory|https://en.wikipedia.org/wiki/Temporary_folder>.
+
+=head2 -D
+
+Download files to C<$XDG_CACHE_HOME/wax> or C<$HOME/.cache/wax> rather than the system's
+temp directory. Can be overriden by C<-d>.
 
 =head2 -?, -h, --help
 
