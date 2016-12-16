@@ -39,6 +39,7 @@ use constant {
     E_NO_ARGUMENTS      => -4,
     E_NO_COMMAND        => -5,
     E_INVALID_OPTION    => -6,
+    E_INVALID_DIRECTORY => -7,
 };
 
 has app_name => (
@@ -59,7 +60,7 @@ has directory => (
     isa       => 'Str',
     predicate => 'has_directory',
     required  => 0,
-    trigger   => method ($dir) { $self->debug("directory: $dir") },
+    trigger   => \&_check_directory,
 );
 
 has keep => (
@@ -126,6 +127,19 @@ has verbose => (
     default => VERBOSE,
     trigger => method ($verbose) { $| = 1 }, # unbuffer output
 );
+
+# log the path. if the directory doesn't exist, create it if its parent directory
+# exists; otherwise, raise an error
+method _check_directory ($dir) {
+    $self->debug("directory: $dir");
+
+    unless (-d $dir) {
+        unless (mkdir $dir) {
+            $self->log(ERROR => "Can't create directory (%s): %s", $dir, $!);
+            exit E_INVALID_DIRECTORY;
+        }
+    }
+}
 
 # lazy constructor for the default LWP::UserAgent instance
 method _build_lwp_user_agent {

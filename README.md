@@ -83,7 +83,7 @@ Node.js man-page viewer
 
 node_version=${NODE_VERSION:-`node --version`}
 docroot="https://cdn.rawgit.com/nodejs/node/$node_version/doc/api"
-wax --cache pandoc --standalone --from markdown --to man "$docroot/$1.md" | man -l -
+wax -D --cache pandoc --standalone --from markdown --to man "$docroot/$1.md" | man -l -
 ```
 
 ## VERSION

@@ -76,10 +76,16 @@ the system restarts. To save files to another directory, use the `-D` or `--dire
 Specify the directory to download files to. Default: the system's
 [temp directory](https://en.wikipedia.org/wiki/Temporary_folder).
 
+If the directory doesn't exist, it is created if its parent directory exists.
+Otherwise, an error is raised.
+
 ### -D
 
 Download files to `$XDG_CACHE_HOME/wax` or `$HOME/.cache/wax` rather than the system's
 temp directory. Can be overriden by `-d`.
+
+If the directory doesn't exist, it is created if its parent directory exists.
+Otherwise, an error is raised.
 
 ### -?, -h, --help
 
@@ -138,7 +144,7 @@ Node.js man-page viewer
 
     node_version=${NODE_VERSION:-`node --version`}
     docroot="https://cdn.rawgit.com/nodejs/node/$node_version/doc/api"
-    wax --cache pandoc --standalone --from markdown --to man "$docroot/$1.md" | man -l -
+    wax -D --cache pandoc --standalone --from markdown --to man "$docroot/$1.md" | man -l -
 ```
 
 ## CAVEATS
