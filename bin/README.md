@@ -167,7 +167,7 @@ URLs e.g:
 
 ## VERSION
 
-1.1.0
+1.1.1
 
 ## SEE ALSO
 
@@ -181,7 +181,7 @@ chocolateboy <chocolate@cpan.org>
 
 ## COPYRIGHT AND LICENSE
 
-Copyright (C) 2010-2016 by chocolateboy
+Copyright (C) 2010-2017 by chocolateboy
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.10.1 or,
