@@ -22,12 +22,13 @@ our $VERSION = '1.1.1';
 use constant {
     CACHE      => 0,
     ENV_PROXY  => 1,
+    EXTENSION  => qr/.(\.(?:(tar\.(?:bz|bz2|gz|lzo|Z))|(?:[ch]\+\+)|(?:\w+)))$/i,
     INDEX      => '%s.index.txt',
     MIRROR     => 0,
     NAME       => 'wax',
     TEMPLATE   => 'XXXXXXXX',
     TIMEOUT    => 60,
-    USER_AGENT => 'Mozilla/5.0 (X11; Linux x86_64; rv:50.0) Gecko/20100101 Firefox/50.0',
+    USER_AGENT => 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:50.0) Gecko/20100101 Firefox/50.0',
     VERBOSE    => 0,
 };
 
@@ -103,7 +104,7 @@ has separator => (
 has template => (
     is      => 'rw',
     isa     => 'Str',
-    default => method() { sprintf('%s_%s', $self->app_name, TEMPLATE) },
+    default => method () { sprintf('%s_%s', $self->app_name, TEMPLATE) },
     lazy    => 1,
 );
 
@@ -170,6 +171,7 @@ method _unlink ($unlink) {
     }
 }
 
+# return the URL's content type or an empty string if the request fails
 method content_type ($url) {
     my $response = $self->lwp_user_agent->head($url);
     my $content_type = '';
@@ -182,6 +184,7 @@ method content_type ($url) {
     return $content_type;
 }
 
+# save the URL to a local filename
 method download ($url, $filename) {
     my $ua = $self->lwp_user_agent;
     my ($downloaded, $error, $response);
@@ -224,12 +227,14 @@ func _escape ($arg) {
     return $arg;
 }
 
+# log a message to stderr with the app's name and message's log level
 method log ($level, $template, @args) {
     my $name = $self->app_name;
     my $message = @args ? sprintf($template, @args) : $template;
     warn "$name: $level: $message", $/;
 }
 
+# return a best-effort guess at the URL's extension e.g. ".md" or ".tar.gz"
 method extension ($url) {
     my $extension = '';
     my $split = $self->is_url($url);
@@ -241,10 +246,10 @@ method extension ($url) {
 
     return $extension unless ($content_type); # won't be defined if the URL is invalid
 
-    if ($content_type eq 'text/plain') {
+    if (($content_type eq 'text/plain') || ($content_type eq 'application/octet-stream')) {
         # try to get a more specific extension from the path
-        if (not(defined $query) && not(defined($fragment)) && $path && ($path =~ /\w+(\.\w+)$/)) {
-            $extension = $1;
+        if (not(defined $query) && $path && ($path =~ EXTENSION)) {
+            $extension = $+;
         }
     }
 
@@ -262,6 +267,8 @@ method extension ($url) {
     return $extension;
 }
 
+# return a truthy value (an arrayref containing the URL's components)
+# if the supplied value can be parsed as a URL, or a falsey value otherwise
 method is_url ($url) {
     if ($url =~ m{^[a-zA-Z][\w+]*://}) { # basic sanity check
         my ($scheme, $domain, $path, $query, $fragment) = uri_split($url);
@@ -271,6 +278,7 @@ method is_url ($url) {
     }
 }
 
+# log a message to stderr if logging is enabled
 method debug ($template, @args) {
     if ($self->verbose) {
         my $name = $self->app_name;
@@ -304,20 +312,21 @@ method _handle ($resolved, $command, $unlink) {
 # (but still imperfect/incomplete) implementation would require at
 # least two extra modules: Win32::ShellQuote and String::ShellQuote:
 # https://rt.cpan.org/Public/Bug/Display.html?id=37348
-#
-# XXX looks like Shell::Escape is... unavailable:
-# http://search.cpan.org/search?query=shell+escape&mode=all
 method render ($args) {
     return join(' ', map { /[^0-9A-Za-z+,.\/:=\@_-]/ ? _escape($_) : $_ } @$args);
 }
 
+# takes a URL and returns a $filename => $error pair where
+# the filename is the path to the saved file and the error
+# is the first error message encountered while trying to download
+# and save it
 method resolve ($url) {
     my ($error, $filename, @resolved);
 
     if ($self->keep) {
         ($filename, $error) = $self->resolve_keep($url);
     } else {
-        $filename = $self->resolve_temp($url);
+        ($filename, $error) = $self->resolve_temp($url);
     }
 
     $error ||= $self->download($url, $filename);
@@ -326,6 +335,8 @@ method resolve ($url) {
     return wantarray ? @resolved : \@resolved;
 }
 
+# takes a URL and returns a $filename => $error pair for
+# cacheable files
 method resolve_keep ($url) {
     my $directory = $self->has_directory ? $self->directory : File::Spec->tmpdir;
     my $id        = sprintf('%s_%s', $self->app_name, sha1_hex($url));
@@ -349,6 +360,8 @@ method resolve_keep ($url) {
     return ($filename, $error);
 }
 
+# takes a URL and returns a $filename => $error pair for
+# temporary files
 method resolve_temp ($url) {
     my $extension = $self->extension($url);
     my $template  = $self->template;
@@ -365,10 +378,19 @@ method resolve_temp ($url) {
         $options{SUFFIX} = $extension;
     }
 
-    srand($$); # see the File::Temp docs
-    return File::Temp->new(%options)->filename;
+    my ($filename, $error);
+
+    try {
+        srand($$); # see the File::Temp docs
+        $filename = File::Temp->new(%options)->filename;
+    } catch {
+        $error = $_;
+    };
+
+    return ($filename, $error);
 }
 
+# process the options and execute the command with substituted filenames
 method run ($argv) {
     my @argv = @$argv;
 

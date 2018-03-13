@@ -6,7 +6,6 @@ use warnings;
 use App::Wax;
 use Method::Signatures::Simple;
 use Test::Differences qw(eq_or_diff);
-use Test::Fatal qw(exception);
 use Test::More tests => 21;
 use Test::TinyMocker qw(mock);
 

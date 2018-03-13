@@ -181,9 +181,10 @@ Otherwise, it's undef.
 
 =head2 resolve_temp
 
-B<Signature>: $url: Str -> $path: Str
+B<Signature>: $url: Str -> ($path: Str, $error: Maybe[Str])
 
-Returns the path of the temporary file the URL should be saved to.
+Returns the path of the temporary file the URL should be saved to
+and an optional error message if creation of the temporary file failed.
 
 =head2 run
 
