@@ -61,6 +61,9 @@ Arguments after this are no longer processed by `wax` and are passed through ver
 Note that the `--cache` and `--mirror` options are mutually exclusive i.e. only one (or neither)
 should be supplied. Supplying both will cause `wax` to terminate with an error.
 
+Note that option bundling is not currently supported e.g. `reach --cache --verbose ...` can't be condensed
+to `reach -cv ...`, and would need to be written as `reach -c -v ...`.
+
 ### -c, --cache
 
 Don't remove the downloaded file(s) after the command exits. Subsequent invocations will
