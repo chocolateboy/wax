@@ -6,7 +6,7 @@ use warnings;
 use App::Wax;
 use Method::Signatures::Simple;
 use Test::Differences qw(eq_or_diff);
-use Test::More tests => 21;
+use Test::More tests => 29;
 use Test::TinyMocker qw(mock);
 
 my @FILENAMES     = ('1.json', '2.html');
@@ -65,40 +65,94 @@ wax_ok(
 
 ######################## separator ###########################
 
+# implicit default separator (no option): --
 wax_ok(
-    "-s --no-wax cmd foo -bar --baz --no-wax $URL[0]",
-    "cmd foo -bar --baz $URL[0]"
+    "cmd foo -bar --baz -- $URL[0] --quux",
+    "cmd foo -bar --baz $URL[0] --quux"
 );
 
+# explicit default separator (short option): --
 wax_ok(
-    "--separator --no-wax cmd foo -bar --baz --no-wax $URL[0]",
-    "cmd foo -bar --baz $URL[0]"
+    "-s -- cmd foo -bar --baz -- $URL[0] --quux",
+    "cmd foo -bar --baz $URL[0] --quux"
 );
 
+# explicit default separator (long option): --
 wax_ok(
-    "-s :: cmd foo -bar --baz :: $URL[0]",
-    "cmd foo -bar --baz $URL[0]"
+    "--separator -- cmd foo -bar --baz -- $URL[0] --quux",
+    "cmd foo -bar --baz $URL[0] --quux"
 );
 
+# no separator (short option)
 wax_ok(
-    "--separator :: cmd foo -bar --baz :: $URL[0]",
-    "cmd foo -bar --baz $URL[0]"
+    "-S cmd foo -bar -- $URL[0] --baz --quux",
+    "cmd foo -bar -- $TEMP[0] --baz --quux"
 );
 
+# no separator (long option)
 wax_ok(
-    "-s SEPARATOR cmd foo -bar --baz SEPARATOR $URL[0]",
-    "cmd foo -bar --baz $URL[0]"
+    "--no-separator cmd foo -bar -- $URL[0] --baz --quux",
+    "cmd foo -bar -- $TEMP[0] --baz --quux"
 );
 
+# custom separator (short option): short separator
 wax_ok(
-    "--separator SEPARATOR cmd foo -bar --baz SEPARATOR $URL[0]",
-    "cmd foo -bar --baz $URL[0]"
+    "-s -X cmd foo -bar --baz -X $URL[0] --quux",
+    "cmd foo -bar --baz $URL[0] --quux"
 );
 
-# confirm `--` is no longer the default separator
+# custom separator (long option): short separator
 wax_ok(
-    "cmd foo -bar --baz -- $URL[0]",
-    "cmd foo -bar --baz -- $TEMP[0]"
+    "--separator -X cmd foo -bar --baz -X $URL[0] --quux",
+    "cmd foo -bar --baz $URL[0] --quux"
+);
+
+# custom separator (short option): long separator
+wax_ok(
+    "-s --no-wax cmd foo -bar --baz --no-wax $URL[0] --quux",
+    "cmd foo -bar --baz $URL[0] --quux"
+);
+
+# custom separator (long option): long separator
+wax_ok(
+    "--separator --no-wax cmd foo -bar --baz --no-wax $URL[0] --quux",
+    "cmd foo -bar --baz $URL[0] --quux"
+);
+
+# custom separator (short option): lowercase word
+wax_ok(
+    "-s separator cmd foo -bar -- $URL[0] --baz separator $URL[0] --quux",
+    "cmd foo -bar -- $TEMP[0] --baz $URL[0] --quux"
+);
+
+# custom separator (long option): lowercase word
+wax_ok(
+    "--separator separator cmd foo -bar -- $URL[0] --baz separator $URL[0] --quux",
+    "cmd foo -bar -- $TEMP[0] --baz $URL[0] --quux"
+);
+
+# custom separator (short option): uppercase word
+wax_ok(
+    "-s SEPARATOR cmd foo -bar --baz SEPARATOR $URL[0] --quux",
+    "cmd foo -bar --baz $URL[0] --quux"
+);
+
+# custom separator (long option): uppercase word
+wax_ok(
+    "--separator SEPARATOR cmd foo -bar --baz SEPARATOR $URL[0] --quux",
+    "cmd foo -bar --baz $URL[0] --quux"
+);
+
+# custom separator (short option): non-word
+wax_ok(
+    "-s :: cmd foo -bar --baz :: $URL[0] --quux",
+    "cmd foo -bar --baz $URL[0] --quux"
+);
+
+# custom separator (long option): non-word
+wax_ok(
+    "--separator :: cmd foo -bar --baz :: $URL[0] --quux",
+    "cmd foo -bar --baz $URL[0] --quux"
 );
 
 ######################## temp file ###########################

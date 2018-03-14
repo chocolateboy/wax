@@ -26,6 +26,7 @@ use constant {
     INDEX      => '%s.index.txt',
     MIRROR     => 0,
     NAME       => 'wax',
+    SEPARATOR  => '--',
     TEMPLATE   => 'XXXXXXXX',
     TIMEOUT    => 60,
     USER_AGENT => 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:50.0) Gecko/20100101 Firefox/50.0',
@@ -96,9 +97,10 @@ has mirror => (
 
 has separator => (
     is        => 'rw',
-    isa       => 'Maybe[Str]',
+    isa       => 'Str',
+    default   => SEPARATOR,
+    clearer   => 'clear_separator',
     predicate => 'has_separator',
-    required  => 0,
 );
 
 has template => (
@@ -411,11 +413,24 @@ method run ($argv) {
     while (@argv) {
         my $arg = shift @argv;
 
+        my $val = sub {
+            if (@argv) {
+                return shift(@argv);
+            } else {
+                pod2usage(
+                    -exitval => E_INVALID_OPTION,
+                    -input   => $0,
+                    -msg     => "missing value for $arg option",
+                    -verbose => 1,
+                );
+            }
+        };
+
         if ($wax_options) {
             if ($arg =~ /^(?:-c|--cache)$/) {
                 $self->cache(1);
             } elsif ($arg =~ /^(?:-d|--dir|--directory)$/) {
-                $self->directory(shift @argv);
+                $self->directory($val->());
             } elsif ($arg eq '-D') {
                 # "${XDG_CACHE_HOME:-$HOME/.cache}/wax"
                 require File::BaseDir;
@@ -427,13 +442,15 @@ method run ($argv) {
             } elsif ($arg =~ /^(?:-m|--mirror)$/) {
                 $self->mirror(1);
             } elsif ($arg =~ /^(?:-s|--separator)$/) {
-                $self->separator(shift @argv);
+                $self->separator($val->());
+            } elsif ($arg =~ /^(?:-S|--no-separator)$/) {
+                $self->clear_separator();
             } elsif ($arg eq '--test') {
                 $test = 1;
             } elsif ($arg =~ /^(?:-t|--timeout)$/) {
-                $self->timeout(shift @argv);
+                $self->timeout($val->());
             } elsif ($arg =~ /^(?:-u|--user-agent)$/) {
-                $self->agent(shift @argv);
+                $self->agent($val->());
             } elsif ($arg =~ /^(?:-V|--version)$/) {
                 print $VERSION, $/;
                 exit 0;

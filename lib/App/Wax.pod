@@ -19,7 +19,7 @@ See the L<wax> documentation for more details.
 
 =head2 app_name
 
-B<Type>: Str, rw, default: C<wax>
+B<Type>: Str, rw, default: "wax".
 
 The application name used in L<debug|"debug"> and L<error|"log"> messages.
 
@@ -39,6 +39,8 @@ B<Type>: Str, rw, optional.
 The directory to download remote resources to. If not supplied,
 the system's L<temporary directory|https://en.wikipedia.org/wiki/Temporary_folder>
 is used.
+
+Can be checked with C<has_directory>.
 
 =head2 keep
 
@@ -71,9 +73,11 @@ If L<"cache"> and L<"mirror"> are both set to true, an exception is thrown.
 
 =head2 separator
 
-B<Type>: Str, rw, optional.
+B<Type>: Str, rw, default: "--".
 
-An optional token used to mark the end of C<wax>'s options.
+A optional token used to mark the end of C<wax>'s options.
+
+Can be cleared with C<clear_separator> and checked with C<has_separator>.
 
 =head2 template
 
