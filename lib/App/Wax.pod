@@ -128,6 +128,12 @@ B<Signature>: $url: Str, $path: Str -> Maybe[Str]
 
 Saves the contents of the URL to the path. Returns the error message if an error ocurred.
 
+=head2 dump_command
+
+B<Signature>: $command: ArrayRef[Str] -> Str
+
+Returns a string representation of the supplied command.
+
 =head2 extension
 
 B<Signature>: $url: Str -> $extension: Str
@@ -154,12 +160,6 @@ B<Signature>: $level: Str, $template: Str, @args: List[Str] -> None
 
 Interpolates the arguments into the C<sprintf> template and logs the message,
 with the level prefixed, to STDERR.
-
-=head2 render
-
-B<Signature>: $command: ArrayRef[Str] -> Str
-
-Returns a string representation of the supplied command.
 
 =head2 resolve
 

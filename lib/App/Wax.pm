@@ -36,12 +36,12 @@ use constant {
 # errors
 use constant {
     OK                  =>  0,
-    E_DOWNLOAD          => -2,
-    E_INVALID_ARGUMENTS => -3,
-    E_NO_ARGUMENTS      => -4,
-    E_NO_COMMAND        => -5,
-    E_INVALID_OPTION    => -6,
-    E_INVALID_DIRECTORY => -7,
+    E_DOWNLOAD          => -1,
+    E_INVALID_OPTION    => -2,
+    E_INVALID_OPTIONS   => -3,
+    E_INVALID_DIRECTORY => -4,
+    E_NO_ARGUMENTS      => -5,
+    E_NO_COMMAND        => -6,
 };
 
 has app_name => (
@@ -158,7 +158,7 @@ method _build_lwp_user_agent {
 method _check_keep {
     if ($self->cache && $self->mirror) {
         $self->log(ERROR => "--cache and --mirror can't be used together");
-        exit E_INVALID_ARGUMENTS;
+        exit E_INVALID_OPTIONS;
     } else {
         $self->keep(1);
     }
@@ -219,7 +219,7 @@ method download ($url, $filename) {
     return $error;
 }
 
-# helper for `render`: escape/quote a shell argument on POSIX shells
+# helper for `dump_command`: escape/quote a shell argument on POSIX shells
 func _escape ($arg) {
     # https://stackoverflow.com/a/1250279
     # https://github.com/boazy/any-shell-escape/issues/1#issuecomment-36226734
@@ -236,7 +236,8 @@ method log ($level, $template, @args) {
     warn "$name: $level: $message", $/;
 }
 
-# return a best-effort guess at the URL's extension e.g. ".md" or ".tar.gz"
+# return a best-effort guess at the URL's extension, e.g. ".md" or ".tar.gz",
+# or an empty string if one can't be determined
 method extension ($url) {
     my $extension = '';
     my $split = $self->is_url($url);
@@ -314,7 +315,7 @@ method _handle ($resolved, $command, $unlink) {
 # (but still imperfect/incomplete) implementation would require at
 # least two extra modules: Win32::ShellQuote and String::ShellQuote:
 # https://rt.cpan.org/Public/Bug/Display.html?id=37348
-method render ($args) {
+method dump_command ($args) {
     return join(' ', map { /[^0-9A-Za-z+,.\/:=\@_-]/ ? _escape($_) : $_ } @$args);
 }
 
@@ -363,7 +364,7 @@ method resolve_keep ($url) {
 }
 
 # takes a URL and returns a $filename => $error pair for
-# temporary files
+# temporary files (i.e. files which will be automatically unlinked)
 method resolve_temp ($url) {
     my $extension = $self->extension($url);
     my $template  = $self->template;
@@ -408,7 +409,7 @@ method run ($argv) {
     my $wax_options = 1;
     my $seen_url = 0;
     my $test = 0;
-    my (@command, @resolve, $msg);
+    my (@command, @resolve);
 
     while (@argv) {
         my $arg = shift @argv;
@@ -434,7 +435,7 @@ method run ($argv) {
             } elsif ($arg eq '-D') {
                 # "${XDG_CACHE_HOME:-$HOME/.cache}/wax"
                 require File::BaseDir;
-                $self->directory(File::BaseDir::cache_home(NAME));
+                $self->directory(File::BaseDir::cache_home($self->app_name));
             } elsif ($arg =~ /^(?:-v|--verbose)$/) {
                 $self->verbose(1);
             } elsif ($arg =~ /^(?:-[?h]|--help)$/) {
@@ -450,13 +451,17 @@ method run ($argv) {
             } elsif ($arg =~ /^(?:-t|--timeout)$/) {
                 $self->timeout($val->());
             } elsif ($arg =~ /^(?:-u|--user-agent)$/) {
-                $self->agent($val->());
+                $self->user_agent($val->());
             } elsif ($arg =~ /^(?:-V|--version)$/) {
                 print $VERSION, $/;
                 exit 0;
             } elsif ($arg =~ /^-/) { # unknown option
-                $msg = sprintf('invalid option: %s', $arg);
-                pod2usage(-input => $0, -verbose => 1, -msg => $msg, -exitval => E_INVALID_OPTION);
+                pod2usage(
+                    -exitval => E_INVALID_OPTION,
+                    -input   => $0,
+                    -msg     => "invalid option: $arg",
+                    -verbose => 1,
+                );
             } else { # non-option: exit the wax-options processing stage
                 push @command, $arg;
                 $wax_options = 0;
@@ -504,7 +509,7 @@ method run ($argv) {
         }
     }
 
-    $self->debug('command: %s', $self->render(\@command));
+    $self->debug('command: %s', $self->dump_command(\@command));
 
     if ($error) {
         $self->debug('exit code: %d', $error);

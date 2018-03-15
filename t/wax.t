@@ -6,7 +6,7 @@ use warnings;
 use App::Wax;
 use Method::Signatures::Simple;
 use Test::Differences qw(eq_or_diff);
-use Test::More tests => 29;
+use Test::More tests => 30;
 use Test::TinyMocker qw(mock);
 
 my @FILENAMES     = ('1.json', '2.html');
@@ -21,11 +21,17 @@ func wax_ok ($args, $want) {
     # to be thrown
     $want ||= 'ERROR';
 
-    my $wax         = App::Wax->new();
-    my @args        = ref($args) ? @$args : split(/\s+/, $args);
-    my @want        = ref($want) ? @$want : split(/\s+/, $want);
-    my $description = sprintf '%s => %s', $wax->render(\@args), $wax->render(\@want);
-    my $got         = $wax->run([ '--test', @args ]);
+    my $wax  = App::Wax->new();
+    my @args = ref($args) ? @$args : split(/\s+/, $args);
+    my @want = ref($want) ? @$want : split(/\s+/, $want);
+
+    my $description = sprintf(
+        '%s => %s',
+        $wax->dump_command(\@args),
+        $wax->dump_command(\@want)
+    );
+
+    my $got = $wax->run([ '--test', @args ]);
 
     local $Test::Builder::Level = $Test::Builder::Level + 1;
     eq_or_diff $got, \@want, $description;
@@ -40,6 +46,15 @@ mock(
         return wantarray ? @resolved : \@resolved;
     }
 );
+
+######################## unit tests ###########################
+
+{
+    my $wax = App::Wax->new;
+    my $user_agent = 'Testbot 1.0';
+    $wax->user_agent($user_agent);
+    is($wax->user_agent, $user_agent, 'get/set user agent');
+}
 
 ######################## no downloads ###########################
 
