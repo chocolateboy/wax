@@ -197,7 +197,7 @@ $ vim http://www.vim.org/
 
 ## VERSION
 
-1.1.1
+2.0.0
 
 ## SEE ALSO
 
