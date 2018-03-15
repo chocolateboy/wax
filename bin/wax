@@ -111,6 +111,10 @@ Set the token used to mark the end of waxable options e.g.:
 
 Note: the separator token is removed from the list of options passed to the command.
 
+=head2 -S, --no-separator
+
+Disable separator-token handling i.e. leave the default separator (`--`) to be handled by the command.
+
 =head2 -t, --timeout INTEGER
 
 Set the timeout for network requests in seconds. Default: 60.
