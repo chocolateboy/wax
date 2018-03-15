@@ -44,16 +44,10 @@ Can be checked with C<has_directory>.
 
 =head2 keep
 
-B<Type>: Bool, rw, default: false.
+B<Type>: Bool, ro, default: false.
 
 True if L<"cache"> or L<"mirror"> are true, false otherwise.
 Used to determine which L<"resolve"> method to use.
-
-=head2 lwp_user_agent
-
-B<Type>: L<LWP::UserAgent>, rw.
-
-The L<LWP::UserAgent> instance used to perform network requests.
 
 =head2 mime_types
 
@@ -95,7 +89,7 @@ The timeout (in seconds) for HTTP requests.
 
 B<Type>: Str, rw.
 
-The value of the L<user agent|"lwp_user_agent">'s HTTP C<User-Agent> header.
+The value of the HTTP client's C<User-Agent> header.
 
 =head2 verbose
 

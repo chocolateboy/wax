@@ -66,12 +66,13 @@ has directory => (
 );
 
 has keep => (
-    is       => 'rw',
+    is       => 'ro',
     isa      => 'Bool',
     default  => 0,
+    writer   => '_set_keep',
 );
 
-has lwp_user_agent => (
+has _lwp_user_agent => (
     is      => 'rw',
     isa     => 'LWP::UserAgent',
     lazy    => 1,
@@ -114,14 +115,14 @@ has timeout => (
     is      => 'rw',
     isa     => 'Int',
     default => TIMEOUT,
-    trigger => method ($timeout) { $self->lwp_user_agent->timeout($timeout) },
+    trigger => method ($timeout) { $self->_lwp_user_agent->timeout($timeout) },
 );
 
 has user_agent => (
     is      => 'rw',
     isa     => 'Str',
     default => USER_AGENT,
-    trigger => method ($user_agent) { $self->lwp_user_agent->agent($user_agent) },
+    trigger => method ($user_agent) { $self->_lwp_user_agent->agent($user_agent) },
 );
 
 has verbose => (
@@ -160,7 +161,7 @@ method _check_keep {
         $self->log(ERROR => "--cache and --mirror can't be used together");
         exit E_INVALID_OPTIONS;
     } else {
-        $self->keep(1);
+        $self->_set_keep(1);
     }
 }
 
@@ -175,7 +176,7 @@ method _unlink ($unlink) {
 
 # return the URL's content type or an empty string if the request fails
 method content_type ($url) {
-    my $response = $self->lwp_user_agent->head($url);
+    my $response = $self->_lwp_user_agent->head($url);
     my $content_type = '';
 
     if ($response->is_success) {
@@ -188,7 +189,7 @@ method content_type ($url) {
 
 # save the URL to a local filename
 method download ($url, $filename) {
-    my $ua = $self->lwp_user_agent;
+    my $ua = $self->_lwp_user_agent;
     my ($downloaded, $error, $response);
 
     if ($self->cache && (-e $filename)) {
