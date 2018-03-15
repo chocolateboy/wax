@@ -115,7 +115,7 @@ If a local file no longer exists, the resource is re-downloaded.
 
 ### -s, --separator STRING
 
-Override the default separator-token used to mark the end of waxable options e.g.:
+Override the default separator-token (C<-->) used to mark the end of waxable options e.g.:
 
     wax --cache --separator :: cmd http://example.com/foo :: --referrer http://example.com
 

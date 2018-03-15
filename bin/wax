@@ -52,11 +52,11 @@ add a caching layer to network requests (remote resources are only fetched once)
 =head1 OPTIONS
 
 The following C<wax> options can be supplied before the command name. Subsequent options are passed to
-the command verbatim, apart from URLs, which are converted to paths to the corresponding
-files. URL arguments can be excluded from the conversion process by supplying a separator token.
+the command verbatim, apart from URLs, which are converted to paths to the corresponding files.
+URL arguments can be excluded from the conversion process by supplying a separator token (default C<-->).
 Arguments after this are no longer processed by C<wax> and are passed through verbatim e.g.:
 
-    wax --cache --separator --no-wax cmd http://example.com/foo --no-wax --referrer http://example.com
+    wax --cache cmd http://example.com/foo -- --referrer http://example.com
 
 Note that the C<--cache> and C<--mirror> options are mutually exclusive i.e. only one (or neither)
 should be supplied. Supplying both will cause C<wax> to terminate with an error.
@@ -105,7 +105,7 @@ If a local file no longer exists, the resource is re-downloaded.
 
 =head2 -s, --separator STRING
 
-Set the token used to mark the end of waxable options e.g.:
+Override the default separator-token (C<-->) used to mark the end of waxable options e.g.:
 
     wax --cache --separator :: cmd http://example.com/foo :: --referrer http://example.com
 
