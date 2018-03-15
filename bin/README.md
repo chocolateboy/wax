@@ -180,11 +180,13 @@ embedded escapes in Windows `cmd`/`command.exe`-like shells.
 It's worth checking that a program actually needs waxing. Many command-line programs already support
 URLs e.g:
 
-    eog http://upload.wikimedia.org/wikipedia/commons/4/4c/Eye_of_GNOME.png
-    gedit http://projects.gnome.org/gedit/
-    gimp http://upload.wikimedia.org/wikipedia/commons/6/6c/Gimpscreen.png
-    perldoc -F "http://www.pair.com/~comdog/brian's_guide.pod"
-    vim http://www.vim.org/
+```bash
+$ eog http://upload.wikimedia.org/wikipedia/commons/4/4c/Eye_of_GNOME.png
+$ gedit http://projects.gnome.org/gedit/
+$ gimp http://upload.wikimedia.org/wikipedia/commons/6/6c/Gimpscreen.png
+$ perldoc -F "http://www.pair.com/~comdog/brian's_guide.pod"
+$ vim http://www.vim.org/
+```
 
 &c.
 
