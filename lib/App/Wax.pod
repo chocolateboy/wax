@@ -171,7 +171,7 @@ or L<"resolve_temp"> otherwise.
 B<Signature>: $url: Str -> ($filename: Str, $error: Maybe[Str])
 
 Returns the path the L<cached|"cache"> or L<mirrored|"mirror"> URL should be saved to/retrieved
-from and an optional error message if creation of the index file (see below) failed.
+from and an optional error message if creation of the index file failed.
 
 C<resolve_keep> uses an additional file to store the resource's extension. If this file
 can't be created, the error message is returned as the second element of the list.
