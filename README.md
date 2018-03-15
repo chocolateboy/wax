@@ -14,8 +14,9 @@
   - [UPDATE](#update)
   - [UNINSTALL](#uninstall)
 - [EXAMPLES](#examples)
-  - [grep](#grep)
   - [espeak](#espeak)
+  - [grep](#grep)
+  - [jsview](#jsview)
   - [nman](#nman)
 - [VERSION](#version)
 - [SEE ALSO](#see-also)
@@ -31,6 +32,14 @@ wax - webify your CLI
 ## SYNOPSIS
 
     wax [OPTIONS] program [OPTIONS] ...
+
+e.g.:
+
+    $ wax vim -R https://registry.npmjs.org/left-pad/-/left-pad-1.2.0.tgz
+
+runs:
+
+    $ vim -R /tmp/wax_abcd1234.tgz
 
 ## DESCRIPTION
 
@@ -65,14 +74,25 @@ then:
 
 ## EXAMPLES
 
-### grep
-
-    $ wax grep -B1 demons http://www.mplayerhq.hu/DOCS/man/en/mplayer.1.txt
-
 ### espeak
 
     $ alias espeak="wax espeak"
     $ espeak -f http://www.setec.org/mel.txt
+
+### grep
+
+    $ wax grep -B1 demons http://www.mplayerhq.hu/DOCS/man/en/mplayer.1.txt
+
+### jsview
+
+Browse files in Node module tarballs
+
+```bash
+#!/bin/sh
+
+# usage: jsview <module> e.g. jsview left-pad
+wax --cache view $(npm info --json "$@" | jq -r .dist.tarball)
+```
 
 ### nman
 

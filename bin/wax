@@ -17,6 +17,14 @@ wax - webify your CLI
 
     wax [OPTIONS] program [OPTIONS] ...
 
+e.g.:
+
+    $ wax vim -R https://registry.npmjs.org/left-pad/-/left-pad-1.2.0.tgz
+
+runs:
+
+    $ vim -R /tmp/wax_abcd1234.tgz
+
 =head1 DESCRIPTION
 
 C<wax> is a command-line program which runs other command-line programs and converts their URL
@@ -121,14 +129,23 @@ Print the version of wax.
 
 =head1 EXAMPLES
 
-=head2 grep
-
-    $ wax grep -B1 demons http://www.mplayerhq.hu/DOCS/man/en/mplayer.1.txt
-
 =head2 espeak
 
     $ alias espeak="wax espeak"
     $ espeak -f http://www.setec.org/mel.txt
+
+=head2 grep
+
+    $ wax grep -B1 demons http://www.mplayerhq.hu/DOCS/man/en/mplayer.1.txt
+
+=head2 jsview
+
+Browse files in Node module tarballs
+
+    #!/bin/sh
+
+    # usage: jsview <module> e.g. jsview left-pad
+    wax --cache view $(npm info --json "$@" | jq -r .dist.tarball)
 
 =head2 nman
 
