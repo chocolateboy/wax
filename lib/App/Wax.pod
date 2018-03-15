@@ -134,7 +134,7 @@ B<Signature>: $url: Str -> $extension: Str
 
 Returns the file extension for the given URL (e.g. C<.html>) if one can be determined from
 the resource's C<Content-Type> header, or the path component of the URL if it's
-C<text/plain>. Otherwise, returns an empty string.
+C<text/plain> or C<application/octet-stream>. Otherwise, returns an empty string.
 
 =head2 is_url
 
