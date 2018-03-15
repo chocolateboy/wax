@@ -207,7 +207,7 @@ $ vim http://www.vim.org/
 
 ## AUTHOR
 
-chocolateboy <chocolate@cpan.org>
+[chocolateboy](mailto:chocolate@cpan.org)
 
 ## COPYRIGHT AND LICENSE
 
