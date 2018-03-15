@@ -1,5 +1,10 @@
 Revision history for Perl extension App::Wax.
 
+2.1.0 Thu 15 Mar 23:18:36 2018
+
+    - update metadata to reflect updated dependencies in the build file
+    - minor doc tweaks/fixes
+
 2.0.0 Thu 15 Mar 15:50:25 2018
 
     - breaking changes:

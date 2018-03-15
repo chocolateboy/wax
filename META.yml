@@ -40,5 +40,5 @@ resources:
   bugtracker: https://github.com/chocolateboy/App-Wax/issues
   license: http://dev.perl.org/licenses/
   repository: https://github.com/chocolateboy/App-Wax
-version: 2.0.0
+version: 2.1.0
 x_serialization_backend: 'CPAN::Meta::YAML version 0.018'

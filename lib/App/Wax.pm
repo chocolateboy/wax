@@ -16,7 +16,7 @@ use Pod::Usage qw(pod2usage);
 use Try::Tiny qw(try catch);
 use URI::Split qw(uri_split);
 
-our $VERSION = '2.0.0';
+our $VERSION = '2.1.0';
 
 # defaults
 use constant {
@@ -79,8 +79,7 @@ has _lwp_user_agent => (
     builder => '_build_lwp_user_agent',
 );
 
-# this should really be a class attribute,
-# but there's no MouseX::ClassAttribute
+# this should really be a class attribute, but there's no MouseX::ClassAttribute
 # (on CPAN)
 has mime_types => (
     is      => 'ro',
@@ -104,6 +103,8 @@ has separator => (
     predicate => 'has_separator',
 );
 
+# TODO make this private and read only, and rename it to something more
+# descriptive e.g. tempfile_template
 has template => (
     is      => 'rw',
     isa     => 'Str',
