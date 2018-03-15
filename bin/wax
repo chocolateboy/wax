@@ -90,7 +90,7 @@ temp directory. Can be overriden by C<-d>.
 If the directory doesn't exist, it is created if its parent directory exists.
 Otherwise, an error is raised.
 
-=head2 -?, -h, --help
+=head2 -h, -?, --help
 
 Display this documentation.
 

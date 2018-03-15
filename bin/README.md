@@ -10,7 +10,7 @@
   - [-c, --cache](#-c---cache)
   - [-d, --dir, --directory STRING](#-d---dir---directory-string)
   - [-D](#-d)
-  - [-?, -h, --help](#---h---help)
+  - [-h, -?, --help](#-h-----help)
   - [-m, --mirror](#-m---mirror)
   - [-s, --separator STRING](#-s---separator-string)
   - [-S, --no-separator](#-s---no-separator)
@@ -100,7 +100,7 @@ temp directory. Can be overriden by `-d`.
 If the directory doesn't exist, it is created if its parent directory exists.
 Otherwise, an error is raised.
 
-### -?, -h, --help
+### -h, -?, --help
 
 Display this documentation.
 
