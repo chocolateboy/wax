@@ -66,7 +66,7 @@ the command verbatim, apart from URLs, which are converted to paths to the corre
 URL arguments can be excluded from the conversion process by supplying a [separator token](#-s---separator-string) (default `--`).
 Arguments after this are no longer processed by `wax` and are passed through verbatim e.g.:
 
-    wax --cache cmd http://example.com/foo -- --referrer http://example.com
+    $ wax --cache cmd http://example.com/foo -- --referrer http://example.com
 
 Note that the `--cache` and `--mirror` options are mutually exclusive i.e. only one (or neither)
 should be supplied. Supplying both will cause `wax` to terminate with an error.
@@ -117,7 +117,7 @@ If a local file no longer exists, the resource is re-downloaded.
 
 Override the default separator-token (`--`) used to mark the end of waxable options e.g.:
 
-    wax --cache --separator :: cmd http://example.com/foo :: --referrer http://example.com
+    $ wax --cache --separator :: cmd http://example.com/foo :: --referrer http://example.com
 
 Note: the separator token is removed from the list of options passed to the command.
 

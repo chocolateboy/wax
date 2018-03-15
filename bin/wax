@@ -56,7 +56,7 @@ the command verbatim, apart from URLs, which are converted to paths to the corre
 URL arguments can be excluded from the conversion process by supplying a separator token (default C<-->).
 Arguments after this are no longer processed by C<wax> and are passed through verbatim e.g.:
 
-    wax --cache cmd http://example.com/foo -- --referrer http://example.com
+    $ wax --cache cmd http://example.com/foo -- --referrer http://example.com
 
 Note that the C<--cache> and C<--mirror> options are mutually exclusive i.e. only one (or neither)
 should be supplied. Supplying both will cause C<wax> to terminate with an error.
@@ -107,13 +107,13 @@ If a local file no longer exists, the resource is re-downloaded.
 
 Override the default separator-token (C<-->) used to mark the end of waxable options e.g.:
 
-    wax --cache --separator :: cmd http://example.com/foo :: --referrer http://example.com
+    $ wax --cache --separator :: cmd http://example.com/foo :: --referrer http://example.com
 
 Note: the separator token is removed from the list of options passed to the command.
 
 =head2 -S, --no-separator
 
-Disable separator-token handling i.e. leave the default separator (`--`) to be handled by the command.
+Disable separator-token handling i.e. leave the default separator (C<-->) to be handled by the command.
 
 =head2 -t, --timeout INTEGER
 
