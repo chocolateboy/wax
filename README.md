@@ -124,6 +124,5 @@ wax --cache -D pandoc --standalone --from markdown --to man "$docroot/$1.md" | m
 
 Copyright (C) 2010-2018 by chocolateboy
 
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself, either Perl version 5.10.1 or,
-at your option, any later version of Perl 5 you may have available.
+App::Wax is free software; you can redistribute it and/or modify it under the terms of the
+[Artistic License 2.0](http://www.opensource.org/licenses/artistic-license-2.0.php).
