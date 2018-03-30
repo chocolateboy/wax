@@ -2,7 +2,6 @@
 
 [![Build Status](https://secure.travis-ci.org/chocolateboy/App-Wax.svg)](http://travis-ci.org/chocolateboy/App-Wax)
 [![CPAN Version](https://badge.fury.io/pl/App-Wax.svg)](http://badge.fury.io/pl/App-Wax)
-[![License](https://img.shields.io/badge/license-artistic-blue.svg)](https://github.com/chocolateboy/App-Wax/blob/master/LICENSE.md)
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
