@@ -3,7 +3,7 @@ package App::Wax;
 use 5.008008;
 
 use Digest::SHA qw(sha1_hex);
-use File::Slurp qw(read_file write_file);
+use File::Slurper qw(read_text write_text);
 use File::Spec;
 use File::Temp;
 use IPC::System::Simple qw(EXIT_ANY $EXITVAL systemx);
@@ -238,8 +238,9 @@ method log ($level, $template, @args) {
     warn "$name: $level: $message", $/;
 }
 
-# return a best-effort guess at the URL's extension, e.g. ".md" or ".tar.gz",
-# or an empty string if one can't be determined
+# return a best-effort guess at the URL's file extension based on its content
+# type, e.g. ".md" or ".tar.gz", or an empty string if one can't be determined.
+# XXX note: makes a network request to determine the content type
 method extension ($url) {
     my $extension = '';
     my $split = $self->is_url($url);
@@ -340,8 +341,10 @@ method resolve ($url) {
     return wantarray ? @resolved : \@resolved;
 }
 
-# takes a URL and returns a $filename => $error pair for
-# cacheable files
+# takes a URL and returns a $filename => $error pair for cacheable files.
+# in order to calculate the filename, we need to determine the URL's extension,
+# which requires a network request for the content type. to avoid hitting the
+# network for subsequent requests, we cache the extension in an index file.
 method resolve_keep ($url) {
     my $directory = $self->has_directory ? $self->directory : File::Spec->tmpdir;
     my $id        = sprintf('%s_%s', $self->app_name, sha1_hex($url));
@@ -350,14 +353,21 @@ method resolve_keep ($url) {
 
     if (-e $index) {
         $self->debug('index (exists): %s', $index);
-        $extension = read_file($index);
+
+        try {
+            $extension = read_text($index);
+        } catch {
+            $error = "unable to load index ($index): $_";
+        };
     } else {
         $self->debug('index (create): %s', $index);
         $extension = $self->extension($url);
 
-        unless (write_file($index, $extension)) {
-            $error = "unable to write to $index: $!";
-        }
+        try {
+            write_text($index, $extension);
+        } catch {
+            $error = "unable to save index ($index): $_";
+        };
     }
 
     $filename = File::Spec->catfile($directory, "$id$extension");
@@ -369,12 +379,10 @@ method resolve_keep ($url) {
 # temporary files (i.e. files which will be automatically unlinked)
 method resolve_temp ($url) {
     my $extension = $self->extension($url);
-    my $template  = $self->template;
-    my %options   = (TEMPLATE => $template, UNLINK => 0);
-    my $directory = $self->directory;
+    my %options   = (TEMPLATE => $self->template, UNLINK => 0);
 
-    if (defined $directory) {
-        $options{DIR} = $directory;
+    if ($self->has_directory) {
+        $options{DIR} = $self->directory;
     } else {
         $options{TMPDIR} = 1;
     }
