@@ -16,7 +16,6 @@ bugtracker     'https://github.com/chocolateboy/App-Wax/issues';
 requires 'Digest::SHA';
 requires 'File::BaseDir'              => '0.07';
 requires 'File::Slurper'              => '0.012';
-requires 'HTTP::Message'              => '6.14';
 requires 'IPC::System::Simple'        => '1.25';
 requires 'LWP'                        => '6.31';
 requires 'Method::Signatures::Simple' => '1.07';
