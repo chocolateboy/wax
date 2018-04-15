@@ -20,17 +20,22 @@ our $VERSION = '2.1.0';
 
 # defaults
 use constant {
-    CACHE      => 0,
-    ENV_PROXY  => 1,
-    EXTENSION  => qr/.(\.(?:(tar\.(?:bz|bz2|gz|lzo|Z))|(?:[ch]\+\+)|(?:\w+)))$/i,
-    INDEX      => '%s.index.txt',
-    MIRROR     => 0,
-    NAME       => 'wax',
-    SEPARATOR  => '--',
-    TEMPLATE   => 'XXXXXXXX',
-    TIMEOUT    => 60,
-    USER_AGENT => 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:50.0) Gecko/20100101 Firefox/50.0',
-    VERBOSE    => 0,
+    CACHE                => 0,
+
+    # RFC 2616: "If the media type remains unknown, the recipient SHOULD treat
+    # it as type 'application/octet-stream'."
+    DEFAULT_CONTENT_TYPE => 'application/octet-stream',
+
+    ENV_PROXY            => 1,
+    EXTENSION            => qr/.(\.(?:(tar\.(?:bz|bz2|gz|lzo|Z))|(?:[ch]\+\+)|(?:\w+)))$/i,
+    INDEX                => '%s.index.txt',
+    MIRROR               => 0,
+    NAME                 => 'wax',
+    SEPARATOR            => '--',
+    TEMPLATE             => 'XXXXXXXX',
+    TIMEOUT              => 60,
+    USER_AGENT           => 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:50.0) Gecko/20100101 Firefox/50.0',
+    VERBOSE              => 0,
 };
 
 # errors
@@ -175,13 +180,14 @@ method _unlink ($unlink) {
     }
 }
 
-# return the URL's content type or an empty string if the request fails
+# return the URL's content-type or an empty string if the request fails
 method content_type ($url) {
     my $response = $self->_lwp_user_agent->head($url);
     my $content_type = '';
 
     if ($response->is_success) {
-        ($content_type) = scalar($response->header('Content-Type')) =~ /^([^;]+)/;
+        # the initial (pre-semicolon) part of the mime-type, trimmed and lowercased.
+        $content_type = $response->headers->content_type || DEFAULT_CONTENT_TYPE;
         $self->debug('content type: %s', $content_type);
     }
 
