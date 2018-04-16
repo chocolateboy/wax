@@ -1,34 +1,45 @@
+use 5.008008;
 use strict;
 use warnings;
 
-use lib '.';
-use inc::Module::Install;
+use ExtUtils::MakeMaker;
 
-name           'App-Wax';
-author         'chocolateboy <chocolate@cpan.org>';
-license        'perl';
-all_from       'lib/App/Wax.pm';
-install_script 'bin/wax';
-perl_version   '5.008008'; # LWP's minimum
-repository     'https://github.com/chocolateboy/App-Wax';
-bugtracker     'https://github.com/chocolateboy/App-Wax/issues';
+my $EUMM_VERSION = eval($ExtUtils::MakeMaker::VERSION);
+my $META_MERGE = {
+    install_script => 'bin/wax',
+    perl_version => '5.008008', # LWP's minimum
+    resources => {
+        repository => 'https://github.com/chocolateboy/App-Wax',
+        bugtracker => 'https://github.com/chocolateboy/App-Wax/issues',
+    },
+    test_requires => {
+        'Test::Differences' => '0.64',
 
-requires 'Digest::SHA';
-requires 'File::BaseDir'              => '0.07';
-requires 'File::Slurper'              => '0.012';
-requires 'IPC::System::Simple'        => '1.25';
-requires 'LWP'                        => '6.31';
-requires 'Method::Signatures::Simple' => '1.07';
-requires 'MIME::Types'                => '2.17';
-requires 'Mouse'                      => 'v2.5.2';
-requires 'Parallel::parallel_map'     => '0.02';
-requires 'Try::Tiny'                  => '0.30';
-requires 'URI'                        => '1.73';
+        # the latest version (0.05) is not available:
+        # https://github.com/sukria/Test-TinyMocker/issues/8
+        'Test::TinyMocker' => '0.03',
+    },
+};
 
-test_requires 'Test::Differences' => '0.64';
-
-# the latest version (0.05) is not available:
-# https://github.com/sukria/Test-TinyMocker/issues/8
-test_requires 'Test::TinyMocker'  => '0.03';
-
-WriteAll;
+WriteMakefile(
+    NAME           => 'App::Wax',
+    VERSION_FROM   => 'lib/App/Wax.pm',
+    PREREQ_PM      => {
+        'Digest::SHA'                => '0',
+        'File::BaseDir'              => '0.07',
+        'File::Slurper'              => '0.012',
+        'IPC::System::Simple'        => '1.25',
+        'LWP'                        => '6.31',
+        'Method::Signatures::Simple' => '1.07',
+        'MIME::Types'                => '2.17',
+        'Mouse'                      => 'v2.5.2',
+        'Parallel::parallel_map'     => '0.02',
+        'Try::Tiny'                  => '0.30',
+        'URI'                        => '1.73',
+    },
+    ABSTRACT_FROM  => 'lib/App/Wax.pod',
+    AUTHOR         => 'chocolateboy <chocolate@cpan.org>',
+    ($EUMM_VERSION >= 6.48 ? (MIN_PERL_VERSION => '5.8.8') : ()),
+    ($EUMM_VERSION >= 6.31 ? (LICENSE => 'artistic_2') : ()),
+    ($EUMM_VERSION >= 6.46 ? (META_MERGE => $META_MERGE) : ())
+);

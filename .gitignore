@@ -13,6 +13,8 @@ Makefile
 Makefile.old
 MYMETA.json
 MYMETA.yml
+META.json
+META.yml
 nytprof*
 *.o
 *.old
