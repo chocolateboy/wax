@@ -49,7 +49,7 @@ arguments to local file paths. By default, the files are removed after the comma
 As well as adding transparent support for remote resources to commands that don't support them
 natively, `wax` can be used to:
 
-- add support for HTTPS (and any other protocols supported by [LWP](https://metacpan.org/pod/LWP)) to programs that only support HTTP
+- add support for HTTPS (and any other protocols supported by [LWP](https://metacpan.org/pod/LWP)) to programs that [only support HTTP](https://github.com/jgm/pandoc/issues/1266)
 - add a mirroring layer to network requests (remote resources are only fetched if they've been updated)
 - add a caching layer to network requests (remote resources are only fetched once)
 
