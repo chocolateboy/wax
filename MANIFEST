@@ -8,4 +8,10 @@ MANIFEST			This list of files
 META.json
 META.yml
 README
-t/wax.t
+t/cache.t
+t/lib/Test/App/Wax.pm
+t/mirror.t
+t/no-downloads.t
+t/separator.t
+t/temp.t
+t/unit.t
