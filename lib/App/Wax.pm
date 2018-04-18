@@ -194,7 +194,8 @@ method content_type ($url) {
     return $content_type;
 }
 
-# save the URL to a local filename
+# save the URL to a local filename; returns an error message if an error occurred,
+# or a falsey value otherwise
 method download ($url, $filename) {
     my $ua = $self->_lwp_user_agent;
     my ($downloaded, $error, $response);
@@ -234,6 +235,7 @@ func _escape ($arg) {
     $arg =~ s!('{1,})!'"$1"'!g;
     $arg = "'$arg'";
     $arg =~ s{^''|''$}{}g;
+
     return $arg;
 }
 
@@ -409,8 +411,13 @@ method resolve_temp ($url) {
     return ($filename, $error);
 }
 
-# process the options and execute the command with substituted filenames
-method run ($argv) {
+# parse the supplied arrayref of options and return a triple of:
+#
+#   command: an arrayref containing the command to execute
+#   resolve: an arrayref of [index, URL] pairs, where index refers to the URL's
+#            (0-based) index in the commmand array
+#   test:    true if --test was seen; false otherwise
+method _parse ($argv) {
     my @argv = @$argv;
 
     unless (@argv) {
@@ -500,53 +507,59 @@ method run ($argv) {
         }
     }
 
-    unless (@command) {
+    return \@command, \@resolve, $test;
+}
+
+# process the options and execute the command with substituted filenames
+method run ($argv) {
+    my $error = 0;
+    my $unlink = [];
+    my ($command, $resolve, $test) = $self->_parse($argv);
+
+    unless (@$command) {
         $self->log(ERROR => 'no command supplied');
-        return $test ? \@command : E_NO_COMMAND;
+        return $test ? $command : E_NO_COMMAND;
     }
 
-    my $error = 0;
-    my @unlink;
+    if (@$resolve == 1) {
+        my ($index, $url) = @{ $resolve->[0] };
+        my @resolved = $self->resolve($url);
 
-    if (@resolve) {
-        if (@resolve == 1) {
-            my ($index, $url) = @{ $resolve[0] };
-            my @resolved = $self->resolve($url);
+        $error = $self->_handle([ $index, @resolved ], $command, $unlink);
+    } elsif (@$resolve) {
+        $self->debug('jobs: %d', scalar(@$resolve));
 
-            $error = $self->_handle([ $index, @resolved ], \@command, \@unlink);
-        } else {
-            $self->debug('jobs: %d', scalar(@resolve));
+        my @resolved = parallel_map { [ $_->[0], $self->resolve($_->[1]) ] } @$resolve;
 
-            my @resolved = parallel_map { [ $_->[0], $self->resolve($_->[1]) ] } @resolve;
-
-            for my $resolved (@resolved) {
-                $error ||= $self->_handle($resolved, \@command, \@unlink);
-            }
+        for my $resolved (@resolved) {
+            $error ||= $self->_handle($resolved, $command, $unlink);
         }
     }
 
-    $self->debug('command: %s', $self->dump_command(\@command));
+
+
+    $self->debug('command: %s', $self->dump_command($command));
 
     if ($error) {
         $self->debug('exit code: %d', $error);
-        $self->_unlink(\@unlink);
+        $self->_unlink($unlink);
         return $error;
     } elsif ($test) {
-        return \@command;
+        return $command;
     } else {
         try {
             # XXX hack to remove the "<error> in /path/to/App/Wax.pm line <line>"
             # noise. we just want the error message
             no warnings qw(redefine);
             local *IPC::System::Simple::croak = sub { die @_, $/ };
-            systemx(EXIT_ANY, @command);
+            systemx(EXIT_ANY, @$command);
         } catch {
             chomp;
             $self->log(ERROR => $_);
         };
 
         $self->debug('exit code: %d', $EXITVAL);
-        $self->_unlink(\@unlink);
+        $self->_unlink($unlink);
 
         return $EXITVAL;
     }
