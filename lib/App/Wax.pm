@@ -187,8 +187,14 @@ method content_type ($url) {
 
     if ($response->is_success) {
         # the initial (pre-semicolon) part of the mime-type, trimmed and lowercased.
-        $content_type = $response->headers->content_type || DEFAULT_CONTENT_TYPE;
-        $self->debug('content type: %s', $content_type);
+        $content_type = $response->headers->content_type;
+
+        if ($content_type) {
+            $self->debug('content type: %s', $content_type);
+        } else {
+            $content_type = DEFAULT_CONTENT_TYPE;
+            $self->debug('content type (default): %s', $content_type);
+        }
     }
 
     return $content_type;
