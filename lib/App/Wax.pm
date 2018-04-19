@@ -190,10 +190,10 @@ method content_type ($url) {
         $content_type = $response->headers->content_type;
 
         if ($content_type) {
-            $self->debug('content type: %s', $content_type);
+            $self->debug('content-type: %s', $content_type);
         } else {
             $content_type = DEFAULT_CONTENT_TYPE;
-            $self->debug('content type (default): %s', $content_type);
+            $self->debug('content-type (default): %s', $content_type);
         }
     }
 
