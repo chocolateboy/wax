@@ -16,7 +16,8 @@ use Pod::Usage qw(pod2usage);
 use Try::Tiny qw(try catch);
 use URI::Split qw(uri_split);
 
-our $VERSION = '2.1.0';
+our $APP_VERSION = 'v2.2.0'; # version of wax
+our $VERSION     = 'v3.0.0'; # version of App::Wax
 
 # defaults
 use constant {
@@ -488,7 +489,7 @@ method _parse ($argv) {
             } elsif ($arg =~ /^(?:-u|--user-agent)$/) {
                 $self->user_agent($val->());
             } elsif ($arg =~ /^(?:-V|--version)$/) {
-                print $VERSION, $/;
+                printf "%s (%s %s)$/", $APP_VERSION, __PACKAGE__, $VERSION;
                 exit 0;
             } elsif ($arg =~ /^-/) { # unknown option
                 pod2usage(
