@@ -101,7 +101,7 @@ If set to true, diagnostic messages are printed to STDERR.
 
 =head2 content_type
 
-B<Signature>: $url: Str -> $content_type: Str
+B<Signature>: [ $url: Str, $url_index: Int ] -> $content_type: Str
 
 Returns the value of the HTTP C<Content-Type> header for the supplied URL e.g. C<text/html>.
 
@@ -118,7 +118,7 @@ if L<"verbose"> is set to true.
 
 =head2 download
 
-B<Signature>: $url: Str, $path: Str -> Maybe[Str]
+B<Signature>: [ $url: Str, $url_index: Int ], $path: Str -> Maybe[Str]
 
 Saves the contents of the URL to the path. Returns the error message if an error ocurred.
 
@@ -130,7 +130,7 @@ Returns a string representation of the supplied command.
 
 =head2 extension
 
-B<Signature>: $url: Str -> $extension: Str
+B<Signature>: [ $url: Str, $url_index: Int ] -> $extension: Str
 
 Returns the file extension for the given URL (e.g. C<.html>) if one can be determined from
 the resource's C<Content-Type> header, or the path component of the URL if it's
@@ -157,7 +157,7 @@ with the level prefixed, to STDERR.
 
 =head2 resolve
 
-B<Signature>: $url: Str -> ($path: Str, $error: Maybe[Str]): List|ArrayRef
+B<Signature>: [ $url: Str, $url_index: Int ] -> ($path: Str, $error: Maybe[Str]): List|ArrayRef
 
 Takes a URL and returns a list (list context) or ArrayRef (scalar context)
 containing the file path corresponding to the URL, and an optional error
@@ -168,7 +168,7 @@ or L<"resolve_temp"> otherwise.
 
 =head2 resolve_keep
 
-B<Signature>: $url: Str -> ($filename: Str, $error: Maybe[Str])
+B<Signature>: [ $url: Str, $url_index: Int ] -> ($filename: Str, $error: Maybe[Str])
 
 Returns the path the L<cached|"cache"> or L<mirrored|"mirror"> URL should be saved to/retrieved
 from and an optional error message if creation of the index file failed.
@@ -179,7 +179,7 @@ Otherwise, it's undef.
 
 =head2 resolve_temp
 
-B<Signature>: $url: Str -> ($path: Str, $error: Maybe[Str])
+B<Signature>: [ $url: Str, $url_index: Int ] -> ($path: Str, $error: Maybe[Str])
 
 Returns the path of the temporary file the URL should be saved to
 and an optional error message if creation of the temporary file failed.

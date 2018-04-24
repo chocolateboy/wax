@@ -1,5 +1,13 @@
 Revision history for Perl extension App::Wax.
 
+3.0.0 - TBC
+
+    - breaking change:
+        - indicate which URL log messages apply to.
+          this requires the index of each URL to be tracked and
+          methods have been updated to take a $url => $url_index
+          pair instead of just a URL
+
 2.1.0 Thu 15 Mar 23:18:36 2018
 
     - update metadata to reflect updated dependencies in the build file

@@ -20,22 +20,23 @@ our $VERSION = '2.1.0';
 
 # defaults
 use constant {
-    CACHE                => 0,
+    CACHE      => 0,
+    ENV_PROXY  => 1,
+    EXTENSION  => qr/.(\.(?:(tar\.(?:bz|bz2|gz|lzo|Z))|(?:[ch]\+\+)|(?:\w+)))$/i,
+    INDEX      => '%s.index.txt',
+    MIRROR     => 0,
+    NAME       => 'wax',
+    SEPARATOR  => '--',
+    TEMPLATE   => 'XXXXXXXX',
+    TIMEOUT    => 60,
+    USER_AGENT => 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:50.0) Gecko/20100101 Firefox/50.0',
+    VERBOSE    => 0,
+};
 
-    # RFC 2616: "If the media type remains unknown, the recipient SHOULD treat
-    # it as type 'application/octet-stream'."
+# RFC 2616: "If the media type remains unknown, the recipient SHOULD treat
+# it as type 'application/octet-stream'."
+use constant {
     DEFAULT_CONTENT_TYPE => 'application/octet-stream',
-
-    ENV_PROXY            => 1,
-    EXTENSION            => qr/.(\.(?:(tar\.(?:bz|bz2|gz|lzo|Z))|(?:[ch]\+\+)|(?:\w+)))$/i,
-    INDEX                => '%s.index.txt',
-    MIRROR               => 0,
-    NAME                 => 'wax',
-    SEPARATOR            => '--',
-    TEMPLATE             => 'XXXXXXXX',
-    TIMEOUT              => 60,
-    USER_AGENT           => 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:50.0) Gecko/20100101 Firefox/50.0',
-    VERBOSE              => 0,
 };
 
 # errors
@@ -181,7 +182,8 @@ method _unlink ($unlink) {
 }
 
 # return the URL's content-type or an empty string if the request fails
-method content_type ($url) {
+method content_type ($_url) {
+    my ($url, $url_index) = @$_url;
     my $response = $self->_lwp_user_agent->head($url);
     my $content_type = '';
 
@@ -190,10 +192,10 @@ method content_type ($url) {
         $content_type = $response->headers->content_type;
 
         if ($content_type) {
-            $self->debug('content-type: %s', $content_type);
+            $self->debug('content-type (%d): %s', $url_index, $content_type);
         } else {
             $content_type = DEFAULT_CONTENT_TYPE;
-            $self->debug('content-type (default): %s', $content_type);
+            $self->debug('content-type (%d): %s (default)', $url_index, $content_type);
         }
     }
 
@@ -202,7 +204,8 @@ method content_type ($url) {
 
 # save the URL to a local filename; returns an error message if an error occurred,
 # or a falsey value otherwise
-method download ($url, $filename) {
+method download ($_url, $filename) {
+    my ($url, $url_index) = @$_url;
     my $ua = $self->_lwp_user_agent;
     my ($downloaded, $error, $response);
 
@@ -225,10 +228,10 @@ method download ($url, $filename) {
     }
 
     if (defined $downloaded) {
-        $self->debug('download (%s): %s', ($downloaded ? 'yes' : 'no'), $url);
+        $self->debug('download (%d): %s', $url_index,  ($downloaded ? 'yes' : 'no'));
     } else {
         my $status = $response->status_line;
-        $error = "can't download URL ($url) to filename ($filename): $status";
+        $error = "can't download URL #$url_index ($url) to filename ($filename): $status";
     }
 
     return $error;
@@ -255,14 +258,15 @@ method log ($level, $template, @args) {
 # return a best-effort guess at the URL's file extension based on its content
 # type, e.g. ".md" or ".tar.gz", or an empty string if one can't be determined.
 # XXX note: makes a network request to determine the content type
-method extension ($url) {
+method extension ($_url) {
+    my ($url, $url_index) = @$_url;
     my $extension = '';
     my $split = $self->is_url($url);
 
     return $extension unless ($split);
 
     my ($scheme, $domain, $path, $query, $fragment) = @$split;
-    my $content_type = $self->content_type($url);
+    my $content_type = $self->content_type($_url);
 
     return $extension unless ($content_type); # won't be defined if the URL is invalid
 
@@ -282,7 +286,7 @@ method extension ($url) {
         }
     }
 
-    $self->debug('extension: %s', $extension);
+    $self->debug('extension (%d): %s', $url_index, $extension);
 
     return $extension;
 }
@@ -292,6 +296,7 @@ method extension ($url) {
 method is_url ($url) {
     if ($url =~ m{^[a-zA-Z][\w+]*://}) { # basic sanity check
         my ($scheme, $domain, $path, $query, $fragment) = uri_split($url);
+
         if ($scheme && ($domain || $path)) { # no domain for file:// URLs
             return [ $scheme, $domain, $path, $query, $fragment ];
         }
@@ -311,9 +316,9 @@ method debug ($template, @args) {
 # with the file path; push the path onto the delete list if
 # it's a temporary file; and log any errors
 method _handle ($resolved, $command, $unlink) {
-    my ($index, $filename, $error) = @$resolved;
+    my ($command_index, $filename, $error) = @$resolved;
 
-    $command->[$index] = $filename;
+    $command->[$command_index] = $filename;
 
     unless ($self->keep) {
         push @$unlink, $filename;
@@ -340,16 +345,16 @@ method dump_command ($args) {
 # the filename is the path to the saved file and the error
 # is the first error message encountered while trying to download
 # and save it
-method resolve ($url) {
+method resolve ($_url) {
     my ($error, $filename, @resolved);
 
     if ($self->keep) {
-        ($filename, $error) = $self->resolve_keep($url);
+        ($filename, $error) = $self->resolve_keep($_url);
     } else {
-        ($filename, $error) = $self->resolve_temp($url);
+        ($filename, $error) = $self->resolve_temp($_url);
     }
 
-    $error ||= $self->download($url, $filename);
+    $error ||= $self->download($_url, $filename);
     @resolved = ($filename, $error);
 
     return wantarray ? @resolved : \@resolved;
@@ -359,40 +364,41 @@ method resolve ($url) {
 # in order to calculate the filename, we need to determine the URL's extension,
 # which requires a network request for the content type. to avoid hitting the
 # network for subsequent requests, we cache the extension in an index file.
-method resolve_keep ($url) {
+method resolve_keep ($_url) {
+    my ($url, $url_index) = @$_url;
     my $directory = $self->has_directory ? $self->directory : File::Spec->tmpdir;
-    my $id        = sprintf('%s_%s', $self->app_name, sha1_hex($url));
-    my $index     = File::Spec->catfile($directory, sprintf(INDEX, $id));
-    my ($error, $extension, $filename);
+    my $id = sprintf('%s_%s', $self->app_name, sha1_hex($url));
+    my $index_file = File::Spec->catfile($directory, sprintf(INDEX, $id));
+    my ($error, $extension);
 
-    if (-e $index) {
-        $self->debug('index (exists): %s', $index);
+    if (-e $index_file) {
+        $self->debug('index (%d): %s (exists)', $url_index, $index_file);
 
         try {
-            $extension = read_text($index);
+            $extension = read_text($index_file);
         } catch {
-            $error = "unable to load index ($index): $_";
+            $error = "unable to load index #$url_index ($index_file): $_";
         };
     } else {
-        $self->debug('index (create): %s', $index);
-        $extension = $self->extension($url);
+        $self->debug('index (%d): %s (create)', $url_index, $index_file);
+        $extension = $self->extension($_url);
 
         try {
-            write_text($index, $extension);
+            write_text($index_file, $extension);
         } catch {
-            $error = "unable to save index ($index): $_";
+            $error = "unable to save index #$url_index ($index_file): $_";
         };
     }
 
-    $filename = File::Spec->catfile($directory, "$id$extension");
+    my $filename = File::Spec->catfile($directory, "$id$extension");
 
     return ($filename, $error);
 }
 
 # takes a URL and returns a $filename => $error pair for
 # temporary files (i.e. files which will be automatically unlinked)
-method resolve_temp ($url) {
-    my $extension = $self->extension($url);
+method resolve_temp ($_url) {
+    my $extension = $self->extension($_url);
     my %options   = (TEMPLATE => $self->template, UNLINK => 0);
 
     if ($self->has_directory) {
@@ -505,9 +511,13 @@ method _parse ($argv) {
                 $seen_url = 1;
             }
 
-            $self->debug('url: %s', $arg);
+            my $url_index = @resolve + 1; # 1-based
+            my $_url = [ $arg, $url_index ];
+
+            $self->debug('url (%d): %s', $url_index, $arg);
+
             push @command, $arg;
-            push @resolve, [ $#command, $arg ];
+            push @resolve, [ $#command, $_url ];
         } else {
             push @command, $arg;
         }
@@ -526,25 +536,25 @@ method run ($argv) {
         $self->log(ERROR => 'no command supplied');
         return $test ? $command : E_NO_COMMAND;
     }
+    use Data::Dump qw(pp);
 
     if (@$resolve == 1) {
-        my ($index, $url) = @{ $resolve->[0] };
-        my @resolved = $self->resolve($url);
+        my ($command_index, $_url) = @{ $resolve->[0] };
+        my @resolved = $self->resolve($_url);
 
-        $error = $self->_handle([ $index, @resolved ], $command, $unlink);
+        $error = $self->_handle([ $command_index, @resolved ], $command, $unlink);
     } elsif (@$resolve) {
         $self->debug('jobs: %d', scalar(@$resolve));
 
-        my @resolved = parallel_map { [ $_->[0], $self->resolve($_->[1]) ] } @$resolve;
+        my @resolved = parallel_map {
+            my ($command_index, $_url) = @$_;
+            [ $command_index, $self->resolve($_url) ]
+        } @$resolve;
 
         for my $resolved (@resolved) {
             $error ||= $self->_handle($resolved, $command, $unlink);
         }
     }
-
-
-
-    $self->debug('command: %s', $self->dump_command($command));
 
     if ($error) {
         $self->debug('exit code: %d', $error);
@@ -553,6 +563,8 @@ method run ($argv) {
     } elsif ($test) {
         return $command;
     } else {
+        $self->debug('command: %s', $self->dump_command($command));
+
         try {
             # XXX hack to remove the "<error> in /path/to/App/Wax.pm line <line>"
             # noise. we just want the error message

@@ -51,7 +51,8 @@ func wax_is ($args, $want) {
 # XXX note this doesn't allow us to (properly) test things like --timeout
 # and --user-agent
 mock(
-    'App::Wax::resolve' => method ($url) {
+    'App::Wax::resolve' => method ($_url) {
+        my ($url, $url_index) = @$_url;
         my $filename = $self->keep ? $FILENAME_KEEP{$url} : $FILENAME_TEMP{$url};
         my @resolved = ($filename, undef); # (filename, error)
 
