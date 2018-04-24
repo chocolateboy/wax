@@ -536,7 +536,6 @@ method run ($argv) {
         $self->log(ERROR => 'no command supplied');
         return $test ? $command : E_NO_COMMAND;
     }
-    use Data::Dump qw(pp);
 
     if (@$resolve == 1) {
         my ($command_index, $_url) = @{ $resolve->[0] };
