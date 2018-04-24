@@ -39,7 +39,7 @@ WriteMakefile(
         'Try::Tiny'                  => '0.30',
         'URI'                        => '1.73',
     },
-    VERSION_FROM => 'lib/App/Wax.pm',
+    VERSION_FROM => 'bin/wax',
     ($EUMM_VERSION >= 6.5503 ? (BUILD_REQUIRES => $TEST_REQUIRES) : ()),
     ($EUMM_VERSION >= 6.31 ? (LICENSE => 'artistic_2') : ()),
     ($EUMM_VERSION >= 6.46 ? (META_MERGE => $META_MERGE) : ()),

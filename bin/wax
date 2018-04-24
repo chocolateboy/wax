@@ -1,8 +1,13 @@
 #!/usr/bin/env perl
 
+use strict;
+use warnings;
+
 use App::Wax;
 
-exit App::Wax->new->run(\@ARGV);
+our $VERSION = '2.2.0';
+
+exit App::Wax->new({ app_version => $VERSION })->run(\@ARGV);
 
 # FIXME reconcile the need for a) GitHub doc display and b) Pod::Usage
 # discoverability by duplicating wax.pod here :-(
