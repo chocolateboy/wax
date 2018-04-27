@@ -26,6 +26,7 @@ WriteMakefile(
     AUTHOR         => 'chocolateboy <chocolate@cpan.org>',
     EXE_FILES      => ['bin/wax'],
     NAME           => 'App::Wax',
+    VERSION_FROM   => 'bin/wax',
     PREREQ_PM      => {
         'Digest::SHA'                => '0',
         'File::BaseDir'              => '0.07',
@@ -39,7 +40,6 @@ WriteMakefile(
         'Try::Tiny'                  => '0.30',
         'URI'                        => '1.73',
     },
-    VERSION_FROM => 'bin/wax',
     ($EUMM_VERSION >= 6.5503 ? (BUILD_REQUIRES => $TEST_REQUIRES) : ()),
     ($EUMM_VERSION >= 6.31 ? (LICENSE => 'artistic_2') : ()),
     ($EUMM_VERSION >= 6.46 ? (META_MERGE => $META_MERGE) : ()),

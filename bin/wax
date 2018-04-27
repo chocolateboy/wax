@@ -5,7 +5,7 @@ use warnings;
 
 use App::Wax;
 
-our $VERSION = '2.2.0';
+our $VERSION = 'v2.2.0';
 
 exit App::Wax->new({ app_version => $VERSION })->run(\@ARGV);
 
@@ -186,7 +186,7 @@ URLs e.g:
 
 =head1 VERSION
 
-2.1.0
+2.2.0
 
 =head1 SEE ALSO
 
