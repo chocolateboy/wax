@@ -59,7 +59,7 @@ For more details, see the `wax` [man page](bin/README.md).
 
 ### INSTALL
 
-Install [cpanminus](https://github.com/miyagawa/cpanminus#installation) if it's not already installed,
+Install [cpanminus](https://github.com/miyagawa/cpanminus/tree/devel/App-cpanminus#readme) if it's not already installed,
 then:
 
     cpanm App::Wax
