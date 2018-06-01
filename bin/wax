@@ -5,7 +5,9 @@ use warnings;
 
 use App::Wax;
 
-our $VERSION = 'v2.2.0';
+# XXX this declaration must be on a single line
+# https://metacpan.org/pod/version#How-to-declare()-a-dotted-decimal-version
+use version; our $VERSION = version->declare('v2.2.0');
 
 exit App::Wax->new({ app_version => $VERSION })->run(\@ARGV);
 
