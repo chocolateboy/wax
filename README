@@ -83,7 +83,7 @@ VERSION
 SEE ALSO
 
 - The Parrot Virtual File System - a filesystem which provides transparent access to web resources [1]
-- sshfs - a filesystem which provides transparent access to SSH shares [2]
+- SSHFS - a filesystem which provides transparent access to SSH shares [2]
 - zsh completion script [3]
 
 [1] http://ccl.cse.nd.edu/software/parrot/
