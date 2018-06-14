@@ -196,7 +196,7 @@ URLs e.g:
 
 =item * L<The Parrot Virtual File System|http://ccl.cse.nd.edu/software/parrot/>
 
-=item * L<sshfs|http://fuse.sourceforge.net/sshfs.html>
+=item * L<sshfs|https://github.com/libfuse/sshfs>
 
 =item * L<zsh completion script|https://github.com/chocolateboy/App-Wax/wiki/Zsh-completion-script>
 

@@ -87,7 +87,7 @@ SEE ALSO
 - zsh completion script [3]
 
 [1] http://ccl.cse.nd.edu/software/parrot/
-[2] http://fuse.sourceforge.net/sshfs.html
+[2] https://github.com/libfuse/sshfs
 [3] https://github.com/chocolateboy/App-Wax/wiki/Zsh-completion-script
 
 AUTHOR

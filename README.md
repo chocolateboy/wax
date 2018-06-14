@@ -121,7 +121,7 @@ wax --cache -D pandoc --standalone --from markdown --to man "$docroot/$1.md" | m
 ### Links
 
 - [The Parrot Virtual File System](http://ccl.cse.nd.edu/software/parrot/) - a filesystem which provides transparent access to web resources
-- [sshfs](http://fuse.sourceforge.net/sshfs.html) - a filesystem which provides transparent access to SSH shares
+- [sshfs](https://github.com/libfuse/sshfs) - a filesystem which provides transparent access to SSH shares
 
 ## AUTHOR
 
