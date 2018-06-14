@@ -26,6 +26,8 @@
 - [CAVEATS](#caveats)
 - [VERSION](#version)
 - [SEE ALSO](#see-also)
+  - [Tools](#tools)
+  - [Links](#links)
 - [AUTHOR](#author)
 - [COPYRIGHT AND LICENSE](#copyright-and-license)
 
@@ -201,9 +203,14 @@ $ vim http://www.vim.org/
 
 ## SEE ALSO
 
-- [rlwrap](http://utopia.knoware.nl/~hlub/uck/rlwrap/#rlwrap)
-- [sshfs](http://fuse.sourceforge.net/sshfs.html)
+### Tools
+
 - [zsh completion script](https://github.com/chocolateboy/App-Wax/wiki/Zsh-completion-script)
+
+### Links
+
+- [The Parrot Virtual File System](http://ccl.cse.nd.edu/software/parrot/) - a filesystem which provides transparent access to web resources
+- [sshfs](http://fuse.sourceforge.net/sshfs.html) - a filesystem which provides transparent access to SSH shares
 
 ## AUTHOR
 

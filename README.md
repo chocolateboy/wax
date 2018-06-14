@@ -20,6 +20,8 @@
   - [nman](#nman)
 - [VERSION](#version)
 - [SEE ALSO](#see-also)
+  - [Tools](#tools)
+  - [Links](#links)
 - [AUTHOR](#author)
 - [COPYRIGHT AND LICENSE](#copyright-and-license)
 
@@ -112,9 +114,14 @@ wax --cache -D pandoc --standalone --from markdown --to man "$docroot/$1.md" | m
 
 ## SEE ALSO
 
-- [rlwrap](http://utopia.knoware.nl/~hlub/uck/rlwrap/#rlwrap)
-- [sshfs](http://fuse.sourceforge.net/sshfs.html)
+### Tools
+
 - [zsh completion script](https://github.com/chocolateboy/App-Wax/wiki/Zsh-completion-script)
+
+### Links
+
+- [The Parrot Virtual File System](http://ccl.cse.nd.edu/software/parrot/) - a filesystem which provides transparent access to web resources
+- [sshfs](http://fuse.sourceforge.net/sshfs.html) - a filesystem which provides transparent access to SSH shares
 
 ## AUTHOR
 
