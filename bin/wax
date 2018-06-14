@@ -172,7 +172,7 @@ Node.js man-page viewer
 
 As with any command-line programs that take URL parameters, care should be taken to ensure that
 special shell characters are suitably quoted. As a general rule, URLs that contain C<&>, C<~>,
-C<E<lt>>, C<E<gt>>, C<$> &c. should be quoted in shells on Unix-like systems and quoted with
+C<E<lt>>, C<E<gt>>, C<$> etc. should be quoted in shells on Unix-like systems and quoted with
 embedded escapes in Windows C<cmd>/C<command.exe>-like shells.
 
 It's worth checking that a program actually needs waxing. Many command-line programs already support
@@ -184,7 +184,7 @@ URLs e.g:
     $ perldoc -F "http://www.pair.com/~comdog/brian's_guide.pod"
     $ vim http://www.vim.org/
 
-&c.
+etc.
 
 =head1 VERSION
 
@@ -197,6 +197,8 @@ URLs e.g:
 =item * L<The Parrot Virtual File System|http://ccl.cse.nd.edu/software/parrot/>
 
 =item * L<SSHFS|https://github.com/libfuse/sshfs>
+
+=item * L<tmpin|https://github.com/sindresorhus/tmpin>
 
 =item * L<zsh completion script|https://github.com/chocolateboy/App-Wax/wiki/Zsh-completion-script>
 

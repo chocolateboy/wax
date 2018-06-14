@@ -84,6 +84,7 @@ Links
 
 - The Parrot Virtual File System [5] - a filesystem which provides transparent access to web resources
 - SSHFS [6] - a filesystem which provides transparent access to SSH shares
+- tmpin [7] - add stdin support to any CLI app that accepts file input
 
 AUTHOR
 
@@ -93,7 +94,7 @@ COPYRIGHT AND LICENSE
 
 Copyright (c) 2010-2018 by chocolateboy.
 
-This is free software; you can redistribute it and/or modify it under the terms of the Artistic License 2.0. [7]
+This is free software; you can redistribute it and/or modify it under the terms of the Artistic License 2.0. [8]
 
 [1] https://metacpan.org/pod/LWP
 [2] https://github.com/jgm/pandoc/issues/1266
@@ -101,4 +102,5 @@ This is free software; you can redistribute it and/or modify it under the terms 
 [4] https://github.com/chocolateboy/App-Wax/wiki/Zsh-completion-script
 [5] http://ccl.cse.nd.edu/software/parrot/
 [6] https://github.com/libfuse/sshfs
-[7] http://www.opensource.org/licenses/artistic-license-2.0.php
+[7] https://github.com/sindresorhus/tmpin
+[8] http://www.opensource.org/licenses/artistic-license-2.0.php

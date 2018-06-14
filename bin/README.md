@@ -181,7 +181,7 @@ wax --cache -D pandoc --standalone --from markdown --to man "$docroot/$1.md" | m
 
 As with any command-line programs that take URL parameters, care should be taken to ensure that
 special shell characters are suitably quoted. As a general rule, URLs that contain `&`, `~`,
-`<`, `>`, `$` &c. should be quoted in shells on Unix-like systems and quoted with
+`<`, `>`, `$` etc. should be quoted in shells on Unix-like systems and quoted with
 embedded escapes in Windows `cmd`/`command.exe`-like shells.
 
 It's worth checking that a program actually needs waxing. Many command-line programs already support
@@ -195,7 +195,7 @@ $ perldoc -F "http://www.pair.com/~comdog/brian's_guide.pod"
 $ vim http://www.vim.org/
 ```
 
-&c.
+etc.
 
 ## VERSION
 
@@ -211,6 +211,7 @@ $ vim http://www.vim.org/
 
 - [The Parrot Virtual File System](http://ccl.cse.nd.edu/software/parrot/) - a filesystem which provides transparent access to web resources
 - [SSHFS](https://github.com/libfuse/sshfs) - a filesystem which provides transparent access to SSH shares
+- [tmpin](https://github.com/sindresorhus/tmpin) - add stdin support to any CLI app that accepts file input
 
 ## AUTHOR
 
