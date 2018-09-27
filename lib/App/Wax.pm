@@ -18,7 +18,7 @@ use URI::Split qw(uri_split);
 
 # XXX this declaration must be on a single line
 # https://metacpan.org/pod/version#How-to-declare()-a-dotted-decimal-version
-use version; our $VERSION = version->declare('v3.0.0');
+use version; our $VERSION = version->declare('v3.1.0');
 
 # defaults
 use constant {
