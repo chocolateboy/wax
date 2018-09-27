@@ -110,7 +110,7 @@ wax --cache -D pandoc --standalone --from markdown --to man "$docroot/$1.md" | m
 
 ## VERSION
 
-2.2.1
+2.3.0
 
 ## SEE ALSO
 
