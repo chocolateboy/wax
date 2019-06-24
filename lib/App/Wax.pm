@@ -326,9 +326,11 @@ method debug ($template, @args) {
     }
 }
 
-# perform housekeeping after a download: replace the placeholder
-# with the file path; push the path onto the delete list if
-# it's a temporary file; and log any errors
+# perform housekeeping after a download: replace the placeholder with the file
+# path; push the path onto the delete list if it's a temporary file; and log any
+# errors
+#
+# XXX give this a more descriptive name e.g. _handle_download or _after_download
 method _handle ($resolved, $command, $unlink) {
     my ($command_index, $filename, $error) = @$resolved;
 
