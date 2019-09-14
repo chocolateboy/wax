@@ -156,7 +156,7 @@ Browse files in Node module tarballs
     #!/bin/sh
 
     # usage: jsview <module> e.g. jsview left-pad
-    wax --cache view $(npm info --json "$@" | jq -r .dist.tarball)
+    wax --cache vim -R $(npm info --json "$@" | jq -r .dist.tarball)
 
 =head2 nman
 
