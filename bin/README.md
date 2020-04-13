@@ -73,8 +73,8 @@ Arguments after this are no longer processed by `wax` and are passed through ver
 Note that the `--cache` and `--mirror` options are mutually exclusive i.e. only one (or neither)
 should be supplied. Supplying both will cause `wax` to terminate with an error.
 
-Note that option bundling is not currently supported e.g. `reach --cache --verbose ...` can't be condensed
-to `reach -cv ...`, and would need to be written as `reach -c -v ...`.
+Note that option bundling is not currently supported e.g. `wax --cache --verbose ...` can't be condensed
+to `wax -cv ...`, and would need to be written as `wax -c -v ...`.
 
 ### -c, --cache
 
