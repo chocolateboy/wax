@@ -71,6 +71,12 @@ Node.js man-page viewer
     docroot="https://cdn.jsdelivr.net/gh/nodejs/node@$node_version/doc/api"
     wax --cache -D pandoc --standalone --from markdown --to man "$docroot/$1.md" | man -l -
 
+rg
+
+Get the default key bindings for mpv:
+
+    wax rg -r '$1' '^#(\S.+)$' https://git.io/JfYlz | sort
+
 VERSION
 
 2.3.1

@@ -1,7 +1,6 @@
 # wax
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+<!-- toc -->
 
 - [NAME](#name)
 - [SYNOPSIS](#synopsis)
@@ -23,6 +22,7 @@
   - [grep](#grep)
   - [jsview](#jsview)
   - [nman](#nman)
+  - [rg](#rg)
 - [CAVEATS](#caveats)
 - [VERSION](#version)
 - [SEE ALSO](#see-also)
@@ -31,7 +31,7 @@
 - [AUTHOR](#author)
 - [COPYRIGHT AND LICENSE](#copyright-and-license)
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+<!-- tocstop -->
 
 ## NAME
 
@@ -177,6 +177,12 @@ node_version=${NODE_VERSION:-`node --version`}
 docroot="https://cdn.jsdelivr.net/gh/nodejs/node@$node_version/doc/api"
 wax --cache -D pandoc --standalone --from markdown --to man "$docroot/$1.md" | man -l -
 ```
+
+### rg
+
+Get the default key bindings for mpv:
+
+    wax rg -r '$1' '^#(\S.+)$' https://git.io/JfYlz | sort
 
 ## CAVEATS
 

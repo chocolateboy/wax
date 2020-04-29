@@ -169,6 +169,13 @@ Node.js man-page viewer
     docroot="https://cdn.jsdelivr.net/gh/nodejs/node@$node_version/doc/api"
     wax --cache -D pandoc --standalone --from markdown --to man "$docroot/$1.md" | man -l -
 
+
+=head2 rg
+
+Get the default key bindings for mpv:
+
+    wax rg -r '$1' '^#(\S.+)$' https://git.io/JfYlz | sort
+
 =head1 CAVEATS
 
 As with any command-line programs that take URL parameters, care should be taken to ensure that
