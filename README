@@ -16,9 +16,12 @@ runs:
 
 DESCRIPTION
 
-wax is a command-line program which runs other command-line programs and converts their URL arguments to local file paths. By default, the files are removed after the command has exited.
+wax is a command-line program which runs other command-line programs and
+converts their URL arguments to local file paths. By default, the files are
+removed after the command has exited.
 
-As well as adding transparent support for remote resources to commands that don't support them natively, wax can be used to:
+As well as adding transparent support for remote resources to commands that
+don't support them natively, wax can be used to:
 
 - add support for HTTPS (and any other protocols supported by LWP [1]) to programs that only support HTTP [2]
 - add a mirroring layer to network requests (remote resources are only fetched if they've been updated)
@@ -71,11 +74,11 @@ Node.js man-page viewer
     docroot="https://cdn.jsdelivr.net/gh/nodejs/node@$node_version/doc/api"
     wax --cache -D pandoc --standalone --from markdown --to man "$docroot/$1.md" | man -l -
 
-rg
+ripgrep
 
 Get the default key bindings for mpv:
 
-    wax rg -r '$1' '^#(\S.+)$' https://git.io/JfYlz | sort
+    $ wax rg -r '$1' '^#(\S.+)$' https://git.io/JfYlz | sort
 
 VERSION
 

@@ -17,7 +17,7 @@
   - [grep](#grep)
   - [jsview](#jsview)
   - [nman](#nman)
-  - [rg](#rg)
+  - [ripgrep](#ripgrep)
 - [VERSION](#version)
 - [SEE ALSO](#see-also)
   - [Tools](#tools)
@@ -109,11 +109,11 @@ docroot="https://cdn.jsdelivr.net/gh/nodejs/node@$node_version/doc/api"
 wax --cache -D pandoc --standalone --from markdown --to man "$docroot/$1.md" | man -l -
 ```
 
-### rg
+### ripgrep
 
 Get the default key bindings for mpv:
 
-    wax rg -r '$1' '^#(\S.+)$' https://git.io/JfYlz | sort
+    $ wax rg -r '$1' '^#(\S.+)$' https://git.io/JfYlz | sort
 
 ## VERSION
 
