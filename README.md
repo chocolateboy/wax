@@ -1,7 +1,7 @@
 # wax
 
-[![Build Status](https://travis-ci.org/chocolateboy/wax.svg)](http://travis-ci.org/chocolateboy/wax)
-[![CPAN Version](https://badge.fury.io/pl/App-Wax.svg)](http://badge.fury.io/pl/App-Wax)
+[![Build Status](https://travis-ci.org/chocolateboy/wax.svg)](https://travis-ci.org/chocolateboy/wax)
+[![CPAN Version](https://badge.fury.io/pl/App-Wax.svg)](https://badge.fury.io/pl/App-Wax)
 
 <!-- toc -->
 
@@ -127,7 +127,7 @@ Get the default key bindings for mpv:
 
 ### Links
 
-- [The Parrot Virtual File System](http://ccl.cse.nd.edu/software/parrot/) - a filesystem which provides transparent access to web resources
+- [The Parrot Virtual File System](https://ccl.cse.nd.edu/software/parrot/) - a filesystem which provides transparent access to web resources
 - [SSHFS](https://github.com/libfuse/sshfs) - a filesystem which provides transparent access to SSH shares
 - [tmpin](https://github.com/sindresorhus/tmpin) - add stdin support to any CLI app that accepts file input
 
@@ -140,4 +140,4 @@ Get the default key bindings for mpv:
 Copyright © 2010-2020 by chocolateboy.
 
 This is free software; you can redistribute it and/or modify it under the terms of the
-[Artistic License 2.0](http://www.opensource.org/licenses/artistic-license-2.0.php).
+[Artistic License 2.0](https://www.opensource.org/licenses/artistic-license-2.0.php).

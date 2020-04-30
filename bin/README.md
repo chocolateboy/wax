@@ -68,7 +68,7 @@ the command verbatim, apart from URLs, which are converted to paths to the corre
 URL arguments can be excluded from the conversion process by supplying a [separator token](#-s---separator-string) (default `--`).
 Arguments after this are no longer processed by `wax` and are passed through verbatim e.g.:
 
-    $ wax --cache cmd http://example.com/foo -- --referrer http://example.com
+    $ wax --cache cmd https://example.com/foo -- --referrer https://example.com
 
 Note that the `--cache` and `--mirror` options are mutually exclusive i.e. only one (or neither)
 should be supplied. Supplying both will cause `wax` to terminate with an error.
@@ -119,7 +119,7 @@ If a local file no longer exists, the resource is re-downloaded.
 
 Override the default separator-token (`--`) used to mark the end of waxable options e.g.:
 
-    $ wax --cache --separator :: cmd http://example.com/foo :: --referrer http://example.com
+    $ wax --cache --separator :: cmd https://example.com/foo :: --referrer https://example.com
 
 Note: the separator token is removed from the list of options passed to the command.
 
@@ -195,11 +195,10 @@ It's worth checking that a program actually needs waxing. Many command-line prog
 URLs e.g:
 
 ```bash
-$ eog http://upload.wikimedia.org/wikipedia/commons/4/4c/Eye_of_GNOME.png
-$ gedit http://projects.gnome.org/gedit/
-$ gimp http://upload.wikimedia.org/wikipedia/commons/6/6c/Gimpscreen.png
-$ perldoc -F "http://www.pair.com/~comdog/brian's_guide.pod"
-$ vim http://www.vim.org/
+$ eog https://upload.wikimedia.org/wikipedia/commons/4/4c/Eye_of_GNOME.png
+$ gedit https://projects.gnome.org/gedit/
+$ gimp https://upload.wikimedia.org/wikipedia/commons/6/6c/Gimpscreen.png
+$ vim https://www.vim.org/
 ```
 
 etc.
@@ -216,7 +215,7 @@ etc.
 
 ### Links
 
-- [The Parrot Virtual File System](http://ccl.cse.nd.edu/software/parrot/) - a filesystem which provides transparent access to web resources
+- [The Parrot Virtual File System](https://ccl.cse.nd.edu/software/parrot/) - a filesystem which provides transparent access to web resources
 - [SSHFS](https://github.com/libfuse/sshfs) - a filesystem which provides transparent access to SSH shares
 - [tmpin](https://github.com/sindresorhus/tmpin) - add stdin support to any CLI app that accepts file input
 
@@ -229,4 +228,4 @@ etc.
 Copyright © 2010-2020 by chocolateboy.
 
 This is free software; you can redistribute it and/or modify it under the
-terms of the [Artistic License 2.0](http://www.opensource.org/licenses/artistic-license-2.0.php).
+terms of the [Artistic License 2.0](https://www.opensource.org/licenses/artistic-license-2.0.php).
