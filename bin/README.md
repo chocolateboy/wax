@@ -216,7 +216,7 @@ etc.
 
 ## VERSION
 
-2.3.1
+2.3.2
 
 ## SEE ALSO
 
