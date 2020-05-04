@@ -216,13 +216,13 @@ etc.
 
 ## VERSION
 
-2.3.2
+2.3.3
 
 ## SEE ALSO
 
 ### Tools
 
-- [zsh completion script](https://github.com/chocolateboy/App-Wax/wiki/Zsh-completion-script)
+- [zsh completion script](https://github.com/chocolateboy/wax/wiki/Zsh-completion-script)
 
 ### Links
 
