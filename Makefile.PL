@@ -32,7 +32,7 @@ WriteMakefile(
         'File::BaseDir'              => '0.08',
         'File::Slurper'              => '0.012',
         'IPC::System::Simple'        => '1.30',
-        'LWP'                        => '6.44',
+        'LWP'                        => '6.46',
         'Method::Signatures::Simple' => '1.07',
         'MIME::Types'                => '2.17',
         'Mouse'                      => 'v2.5.10',
