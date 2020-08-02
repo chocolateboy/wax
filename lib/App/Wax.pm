@@ -23,18 +23,21 @@ use version; our $VERSION = version->declare('v3.1.2');
 
 # defaults
 use constant {
-    CACHE      => 0,
-    ENV_PROXY  => 1,
-    EXTENSION  => qr/.(\.(?:(tar\.(?:bz|bz2|gz|lzo|Z))|(?:[ch]\+\+)|(?:\w+)))$/i,
-    INDEX      => '%s.index.txt',
-    MIRROR     => 0,
-    NAME       => 'wax',
-    SEPARATOR  => '--',
-    TEMPLATE   => 'XXXXXXXX',
-    TIMEOUT    => 60,
-    USER_AGENT => ($ENV{WAX_USER_AGENT} || 'Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101 Firefox/68.0'),
-    VERBOSE    => 0,
+    CACHE              => 0,
+    DEFAULT_USER_AGENT => 'Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0',
+    ENV_PROXY          => 1,
+    ENV_USER_AGENT     => $ENV{WAX_USER_AGENT},
+    EXTENSION          => qr/.(\.(?:(tar\.(?:bz|bz2|gz|lzo|Z))|(?:[ch]\+\+)|(?:\w+)))$/i,
+    INDEX              => '%s.index.txt',
+    MIRROR             => 0,
+    NAME               => 'wax',
+    SEPARATOR          => '--',
+    TEMPLATE           => 'XXXXXXXX',
+    TIMEOUT            => 60,
+    VERBOSE            => 0,
 };
+
+use constant USER_AGENT => ENV_USER_AGENT || DEFAULT_USER_AGENT;
 
 # RFC 2616: "If the media type remains unknown, the recipient SHOULD treat
 # it as type 'application/octet-stream'."
@@ -497,7 +500,8 @@ method _parse ($argv) {
             last;
         } elsif ($self->is_url($arg)) {
             unless ($seen_url) {
-                $self->debug('user-agent: %s', $self->user_agent);
+                my $source = ENV_USER_AGENT ? ' (env)'  : '';
+                $self->debug('user-agent%s: %s', $source, $self->user_agent);
                 $self->debug('timeout: %d', $self->timeout);
                 $seen_url = 1;
             }
