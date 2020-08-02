@@ -8,7 +8,7 @@
 - [OPTIONS](#options)
   - [-c, --cache](#-c---cache)
   - [-d, --dir, --directory STRING](#-d---dir---directory-string)
-  - [-D](#-d)
+  - [-D, --default-directory](#-d---default-directory)
   - [-h, -?, --help](#-h-----help)
   - [-m, --mirror](#-m---mirror)
   - [-s, --separator STRING](#-s---separator-string)
@@ -77,10 +77,6 @@ Note that the `--cache` and `--mirror` options are mutually exclusive i.e. only
 one (or neither) should be supplied. Supplying both will cause `wax` to
 terminate with an error.
 
-Note that option bundling is not currently supported e.g. `wax --cache
---verbose ...` can't be condensed to `wax -cv ...`, and would need to be
-written as `wax -c -v ...`.
-
 ### -c, --cache
 
 Don't remove the downloaded file(s) after the command exits. Subsequent
@@ -91,7 +87,7 @@ If a local file no longer exists, the resource is re-downloaded.
 
 Note: by default, files are saved to the system's temp directory, which is
 typically cleared when the system restarts. To save files to another directory,
-use the `-D` or `--directory` option.
+use the `--directory` or `--default-directory` option.
 
 ### -d, --dir, --directory STRING
 
@@ -101,10 +97,10 @@ Specify the directory to download files to. Default: the system's
 If the directory doesn't exist, it is created if its parent directory exists.
 Otherwise, an error is raised.
 
-### -D
+### -D, --default-directory
 
 Download files to `$XDG_CACHE_HOME/wax` or `$HOME/.cache/wax` rather than the
-system's temp directory. Can be overriden by `-d`.
+system's temp directory. Can be overriden by `--directory`.
 
 If the directory doesn't exist, it is created if its parent directory exists.
 Otherwise, an error is raised.

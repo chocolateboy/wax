@@ -6,6 +6,7 @@ use Digest::SHA qw(sha1_hex);
 use File::Slurper qw(read_text write_text);
 use File::Spec;
 use File::Temp;
+use Getopt::Long qw(GetOptionsFromArray :config posix_default require_order bundling no_auto_abbrev no_ignore_case);
 use IPC::System::Simple qw(EXIT_ANY $EXITVAL systemx);
 use LWP::UserAgent;
 use Method::Signatures::Simple;
@@ -31,7 +32,7 @@ use constant {
     SEPARATOR  => '--',
     TEMPLATE   => 'XXXXXXXX',
     TIMEOUT    => 60,
-    USER_AGENT => 'Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101 Firefox/68.0',
+    USER_AGENT => ($ENV{WAX_USER_AGENT} || 'Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101 Firefox/68.0'),
     VERBOSE    => 0,
 };
 
@@ -51,11 +52,9 @@ use constant INFER_EXTENSION => {
 use constant {
     OK                  =>  0,
     E_DOWNLOAD          => -1,
-    E_INVALID_OPTION    => -2,
+    E_INVALID_DIRECTORY => -2,
     E_INVALID_OPTIONS   => -3,
-    E_INVALID_DIRECTORY => -4,
-    E_NO_ARGUMENTS      => -5,
-    E_NO_COMMAND        => -6,
+    E_NO_COMMAND        => -4,
 };
 
 has app_name => (
@@ -262,6 +261,19 @@ func _escape ($arg) {
     return $arg;
 }
 
+method _use_default_directory () {
+    # "${XDG_CACHE_HOME:-$HOME/.cache}/wax"
+    require File::BaseDir;
+    $self->directory(File::BaseDir::cache_home($self->app_name));
+}
+
+# dump the version (a combination of the app version and the module version) and
+# exit
+method version () {
+    printf "%s (%s %s)$/", $self->app_version, __PACKAGE__, $VERSION;
+    exit 0;
+}
+
 # log a message to stderr with the app's name and message's log level
 method log ($level, $template, @args) {
     my $name = $self->app_name;
@@ -312,7 +324,7 @@ method is_url ($url) {
         my ($scheme, $domain, $path, $query, $fragment) = uri_split($url);
 
         if ($scheme && ($domain || $path)) { # no domain for file:// URLs
-            return [ $scheme, $domain, $path, $query, $fragment ];
+            return [$scheme, $domain, $path, $query, $fragment];
         }
     }
 }
@@ -443,83 +455,44 @@ method resolve_temp ($_url) {
 
 # parse the supplied arrayref of options and return a triple of:
 #
-#   command: an arrayref containing the command to execute
+#   command: an arrayref containing the command to execute and its arguments
 #   resolve: an arrayref of [index, URL] pairs, where index refers to the URL's
 #            (0-based) index in the commmand array
 #   test:    true if --test was seen; false otherwise
 method _parse ($argv) {
-    my @argv = @$argv;
+    my @argv = @$argv; # don't mutate the original
+    my $test = 0;
 
-    unless (@argv) {
+    my $parsed = GetOptionsFromArray(\@argv,
+        'c|cache'             => sub { $self->cache(1) },
+        'd|dir|directory=s'   => sub { $self->directory($_[1]) },
+        'D|default-directory' => sub { $self->_use_default_directory },
+        'h|?|help'            => sub { pod2usage(-input => $0, -verbose => 2, -exitval => 0) },
+        'm|mirror'            => sub { $self->mirror(1) },
+        's|separator=s'       => sub { $self->separator($_[1]) },
+        'S|no-separator'      => sub { $self->clear_separator() },
+        't|timeout=i'         => sub { $self->timeout($_[1]) },
+        'test'                => \$test,
+        'u|user-agent=s'      => sub { $self->user_agent($_[1]) },
+        'v|verbose'           => sub { $self->verbose(1) },
+        'V|version'           => sub { $self->version },
+    );
+
+    unless ($parsed) {
         pod2usage(
-            -exitval => E_NO_ARGUMENTS,
+            -exitval => E_INVALID_OPTIONS,
             -input   => $0,
-            -msg     => 'no arguments supplied',
             -verbose => 0,
         );
     }
 
-    my $wax_options = 1;
-    my $seen_url = 0;
-    my $test = 0;
     my (@command, @resolve);
+    my $seen_url = 0;
 
     while (@argv) {
-        my $arg = shift @argv;
+        my $arg = shift(@argv);
 
-        my $val = sub {
-            if (@argv) {
-                return shift(@argv);
-            } else {
-                pod2usage(
-                    -exitval => E_INVALID_OPTION,
-                    -input   => $0,
-                    -msg     => "missing value for $arg option",
-                    -verbose => 1,
-                );
-            }
-        };
-
-        if ($wax_options) {
-            if ($arg =~ /^(?:-c|--cache)$/) {
-                $self->cache(1);
-            } elsif ($arg =~ /^(?:-d|--dir|--directory)$/) {
-                $self->directory($val->());
-            } elsif ($arg eq '-D') {
-                # "${XDG_CACHE_HOME:-$HOME/.cache}/wax"
-                require File::BaseDir;
-                $self->directory(File::BaseDir::cache_home($self->app_name));
-            } elsif ($arg =~ /^(?:-v|--verbose)$/) {
-                $self->verbose(1);
-            } elsif ($arg =~ /^(?:-[?h]|--help)$/) {
-                pod2usage(-input => $0, -verbose => 2, -exitval => 0);
-            } elsif ($arg =~ /^(?:-m|--mirror)$/) {
-                $self->mirror(1);
-            } elsif ($arg =~ /^(?:-s|--separator)$/) {
-                $self->separator($val->());
-            } elsif ($arg =~ /^(?:-S|--no-separator)$/) {
-                $self->clear_separator();
-            } elsif ($arg eq '--test') {
-                $test = 1;
-            } elsif ($arg =~ /^(?:-t|--timeout)$/) {
-                $self->timeout($val->());
-            } elsif ($arg =~ /^(?:-u|--user-agent)$/) {
-                $self->user_agent($val->());
-            } elsif ($arg =~ /^(?:-V|--version)$/) {
-                printf "%s (%s %s)$/", $self->app_version, __PACKAGE__, $VERSION;
-                exit 0;
-            } elsif ($arg =~ /^-/) { # unknown option
-                pod2usage(
-                    -exitval => E_INVALID_OPTION,
-                    -input   => $0,
-                    -msg     => "invalid option: $arg",
-                    -verbose => 1,
-                );
-            } else { # non-option: exit the wax-options processing stage
-                push @command, $arg;
-                $wax_options = 0;
-            }
-        } elsif ($self->has_separator && ($arg eq $self->separator)) {
+        if ($self->has_separator && ($arg eq $self->separator)) {
             push @command, @argv;
             last;
         } elsif ($self->is_url($arg)) {
@@ -530,15 +503,24 @@ method _parse ($argv) {
             }
 
             my $url_index = @resolve + 1; # 1-based
-            my $_url = [ $arg, $url_index ];
+            my $_url = [$arg, $url_index];
 
             $self->debug('url (%d): %s', $url_index, $arg);
 
             push @command, $arg;
-            push @resolve, [ $#command, $_url ];
+            push @resolve, [$#command, $_url];
         } else {
             push @command, $arg;
         }
+    }
+
+    unless (@command) {
+        pod2usage(
+            -exitval => E_NO_COMMAND,
+            -input   => $0,
+            -msg     => 'no command supplied',
+            -verbose => 0,
+        )
     }
 
     return \@command, \@resolve, $test;
@@ -550,22 +532,17 @@ method run ($argv) {
     my $unlink = [];
     my ($command, $resolve, $test) = $self->_parse($argv);
 
-    unless (@$command) {
-        $self->log(ERROR => 'no command supplied');
-        return $test ? $command : E_NO_COMMAND;
-    }
-
     if (@$resolve == 1) {
         my ($command_index, $_url) = @{ $resolve->[0] };
         my @resolved = $self->resolve($_url);
 
-        $error = $self->_handle([ $command_index, @resolved ], $command, $unlink);
+        $error = $self->_handle([$command_index, @resolved], $command, $unlink);
     } elsif (@$resolve) {
         $self->debug('jobs: %d', scalar(@$resolve));
 
         my @resolved = parallel_map {
             my ($command_index, $_url) = @$_;
-            [ $command_index, $self->resolve($_url) ]
+            [$command_index, $self->resolve($_url)]
         } @$resolve;
 
         for my $resolved (@resolved) {

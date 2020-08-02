@@ -75,9 +75,6 @@ Note that the C<--cache> and C<--mirror> options are mutually exclusive i.e.
 only one (or neither) should be supplied. Supplying both will cause C<wax> to
 terminate with an error.
 
-Note that option bundling is not currently supported e.g. C<wax --cache --verbose ...>
-can't be condensed to C<wax -cv ...>, and would need to be written as C<wax -c -v ...>.
-
 =head2 -c, --cache
 
 Don't remove the downloaded file(s) after the command exits. Subsequent
@@ -88,7 +85,7 @@ If a local file no longer exists, the resource is re-downloaded.
 
 Note: by default, files are saved to the system's temp directory, which is
 typically cleared when the system restarts. To save files to another directory,
-use the C<-D> or C<--directory> option.
+use the C<--directory> or C<--default-directory> option.
 
 =head2 -d, --dir, --directory STRING
 
@@ -98,10 +95,10 @@ L<temp directory|https://en.wikipedia.org/wiki/Temporary_folder>.
 If the directory doesn't exist, it is created if its parent directory exists.
 Otherwise, an error is raised.
 
-=head2 -D
+=head2 -D, --default-directory
 
 Download files to C<$XDG_CACHE_HOME/wax> or C<$HOME/.cache/wax> rather than the
-system's temp directory. Can be overriden by C<-d>.
+system's temp directory. Can be overriden by C<--directory>.
 
 If the directory doesn't exist, it is created if its parent directory exists.
 Otherwise, an error is raised.
