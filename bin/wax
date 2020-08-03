@@ -5,11 +5,7 @@ use warnings;
 
 use App::Wax;
 
-# XXX this declaration must be on a single line
-# https://metacpan.org/pod/version#How-to-declare()-a-dotted-decimal-version
-use version; our $VERSION = version->declare('v2.3.3');
-
-exit App::Wax->new({ app_version => $VERSION })->run(\@ARGV);
+exit App::Wax->new->run(\@ARGV);
 
 # FIXME reconcile the need for a) GitHub doc display and b) Pod::Usage
 # discoverability by duplicating wax.pod here :-(
@@ -145,7 +141,7 @@ Print diagnostic information to STDERR.
 
 =head2 -V, --version
 
-Print the version of wax.
+Print the version and exit.
 
 =head1 EXAMPLES
 
@@ -205,7 +201,7 @@ etc.
 
 =head1 VERSION
 
-2.3.3
+2.4.0
 
 =head1 SEE ALSO
 

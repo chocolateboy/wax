@@ -117,7 +117,7 @@ Get the default key bindings for mpv:
 
 ## VERSION
 
-2.3.3
+2.4.0
 
 ## SEE ALSO
 

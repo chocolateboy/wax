@@ -26,7 +26,7 @@ WriteMakefile(
     AUTHOR         => 'chocolateboy <chocolate@cpan.org>',
     EXE_FILES      => ['bin/wax'],
     NAME           => 'App::Wax',
-    VERSION_FROM   => 'bin/wax',
+    VERSION_FROM   => 'lib/App/Wax.pm',
     PREREQ_PM      => {
         'Digest::SHA'                => '0',
         'File::BaseDir'              => '0.08',

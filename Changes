@@ -5,6 +5,7 @@ Revision history for Perl extension App::Wax.
     - allow option bundling, e.g. `-c -D` can be written as `-cD`
     - add --default-directory as an alias for -D
     - allow the user agent to be defined via $WAX_USER_AGENT
+    - remove the separate module versioning
 
 2.3.3 - 2020-05-04
 

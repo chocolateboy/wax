@@ -17,9 +17,13 @@ use Pod::Usage qw(pod2usage);
 use Try::Tiny qw(try catch);
 use URI::Split qw(uri_split);
 
+# NOTE this is the version of the *command* rather than the *module*, i.e.
+# breaking API changes may occur here which aren't reflected in the SemVer since
+# they don't break the behavior of the command
+#
 # XXX this declaration must be on a single line
 # https://metacpan.org/pod/version#How-to-declare()-a-dotted-decimal-version
-use version; our $VERSION = version->declare('v3.1.2');
+use version; our $VERSION = version->declare('v2.4.0');
 
 # defaults
 use constant {
@@ -64,12 +68,6 @@ has app_name => (
     is      => 'rw',
     isa     => 'Str',
     default => NAME,
-);
-
-has app_version => (
-    is      => 'ro',
-    isa     => 'version',
-    default => sub { $VERSION },
 );
 
 has cache => (
@@ -270,10 +268,9 @@ method _use_default_directory () {
     $self->directory(File::BaseDir::cache_home($self->app_name));
 }
 
-# dump the version (a combination of the app version and the module version) and
-# exit
-method version () {
-    printf "%s (%s %s)$/", $self->app_version, __PACKAGE__, $VERSION;
+# print the version and exit
+method _dump_version () {
+    print $VERSION, $/;
     exit 0;
 }
 
@@ -478,7 +475,7 @@ method _parse ($argv) {
         'test'                => \$test,
         'u|user-agent=s'      => sub { $self->user_agent($_[1]) },
         'v|verbose'           => sub { $self->verbose(1) },
-        'V|version'           => sub { $self->version },
+        'V|version'           => sub { $self->_dump_version },
     );
 
     unless ($parsed) {

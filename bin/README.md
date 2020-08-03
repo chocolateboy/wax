@@ -147,7 +147,7 @@ Print diagnostic information to STDERR.
 
 ### -V, --version
 
-Print the version of wax.
+Print the version and exit.
 
 ## EXAMPLES
 
@@ -212,7 +212,7 @@ etc.
 
 ## VERSION
 
-2.3.3
+2.4.0
 
 ## SEE ALSO
 
