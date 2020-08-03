@@ -44,7 +44,7 @@ func wax_is ($args, $want) {
 
     local $ENV{XDG_CACHE_HOME} = '/home/test/.cache';
 
-    my $got = $wax->run(['--test', @args]);
+    my $got = $wax->run(\@args, test => 1);
 
     local $Test::Builder::Level = $Test::Builder::Level + 1;
     eq_or_diff $got, \@want, $description;

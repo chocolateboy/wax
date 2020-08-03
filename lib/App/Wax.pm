@@ -453,15 +453,13 @@ method resolve_temp ($_url) {
     return ($filename, $error);
 }
 
-# parse the supplied arrayref of options and return a triple of:
+# parse the supplied arrayref of options and return a pair of:
 #
 #   command: an arrayref containing the command to execute and its arguments
 #   resolve: an arrayref of [index, URL] pairs, where index refers to the URL's
 #            (0-based) index in the commmand array
-#   test:    true if --test was seen; false otherwise
 method _parse ($argv) {
     my @argv = @$argv; # don't mutate the original
-    my $test = 0;
 
     my $parsed = GetOptionsFromArray(\@argv,
         'c|cache'             => sub { $self->cache(1) },
@@ -472,7 +470,6 @@ method _parse ($argv) {
         's|separator=s'       => sub { $self->separator($_[1]) },
         'S|no-separator'      => sub { $self->clear_separator() },
         't|timeout=i'         => sub { $self->timeout($_[1]) },
-        'test'                => \$test,
         'u|user-agent=s'      => sub { $self->user_agent($_[1]) },
         'v|verbose'           => sub { $self->verbose(1) },
         'V|version'           => sub { $self->_dump_version },
@@ -524,14 +521,15 @@ method _parse ($argv) {
         )
     }
 
-    return \@command, \@resolve, $test;
+    return \@command, \@resolve;
 }
 
 # process the options and execute the command with substituted filenames
-method run ($argv) {
+method run ($argv, %options) {
+    my $test = $options{test};
     my $error = 0;
     my $unlink = [];
-    my ($command, $resolve, $test) = $self->_parse($argv);
+    my ($command, $resolve) = $self->_parse($argv);
 
     if (@$resolve == 1) {
         my ($command_index, $_url) = @{ $resolve->[0] };
