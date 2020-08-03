@@ -88,7 +88,7 @@ Revision history for Perl extension App::Wax.
 1.0.0 - 2015-02-03
 
     - breaking changes:
-        - the separator is now opt-in i.e. `--` is no longer the default separator
+        - the separator is now opt-in, i.e. `--` is no longer the default separator
             - as a result the -S/--no-separator option has been removed
         - -d/--debug is now -v/--verbose
         - -d is now short for --dir/--directory

@@ -126,7 +126,7 @@ has separator => (
 );
 
 # TODO make this private and read only, and rename it to something more
-# descriptive e.g. tempfile_template
+# descriptive, e.g. tempfile_template
 has template => (
     is      => 'rw',
     isa     => 'Str',
@@ -345,7 +345,7 @@ method debug ($template, @args) {
 # path; push the path onto the delete list if it's a temporary file; and log any
 # errors
 #
-# XXX give this a more descriptive name e.g. _handle_download or _after_download
+# XXX give this a more descriptive name, e.g. _handle_download or _after_download
 method _handle ($resolved, $command, $unlink) {
     my ($command_index, $filename, $error) = @$resolved;
 
@@ -363,7 +363,7 @@ method _handle ($resolved, $command, $unlink) {
     }
 }
 
-# this is purely for diagnostic purposes i.e. there's no guarantee
+# this is purely for diagnostic purposes, i.e. there's no guarantee
 # that the dumped command can be used as a command line. a better
 # (but still imperfect/incomplete) implementation would require at
 # least two extra modules: Win32::ShellQuote and String::ShellQuote:

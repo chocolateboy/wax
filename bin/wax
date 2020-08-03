@@ -67,11 +67,11 @@ Subsequent options are passed to the command verbatim, apart from URLs, which
 are converted to paths to the corresponding files. URL arguments can be
 excluded from the conversion process by supplying a separator token (default
 C<-->). Arguments after this are no longer processed by C<wax> and are passed
-through verbatim e.g.:
+through verbatim, e.g.:
 
     $ wax --cache cmd https://example.com/foo -- --referrer https://example.com
 
-Note that the C<--cache> and C<--mirror> options are mutually exclusive i.e.
+Note that the C<--cache> and C<--mirror> options are mutually exclusive, i.e.
 only one (or neither) should be supplied. Supplying both will cause C<wax> to
 terminate with an error.
 
@@ -119,16 +119,16 @@ If a local file no longer exists, the resource is re-downloaded.
 =head2 -s, --separator STRING
 
 Override the default separator-token (C<-->) used to mark the end of waxable
-options e.g.:
+options, e.g.:
 
     $ wax --cache --separator :: cmd https://example.com/foo :: --referrer https://example.com
 
-Note: the separator token is removed from the list of options passed to the
+Note: the separator token is removed from the list of arguments passed to the
 command.
 
 =head2 -S, --no-separator
 
-Disable separator-token handling i.e. leave the default separator (C<-->) to be
+Disable separator-token handling, i.e. leave the default separator (C<-->) to be
 handled by the command.
 
 =head2 -t, --timeout INTEGER
@@ -194,7 +194,7 @@ quoted in shells on Unix-like systems and quoted with embedded escapes in
 Windows C<cmd>/C<command.exe>-like shells.
 
 It's worth checking that a program actually needs waxing. Many command-line
-programs already support URLs e.g:
+programs already support URLs, e.g:
 
     $ eog https://upload.wikimedia.org/wikipedia/commons/4/4c/Eye_of_GNOME.png
     $ gedit https://projects.gnome.org/gedit/

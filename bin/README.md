@@ -69,11 +69,11 @@ options are passed to the command verbatim, apart from URLs, which are
 converted to paths to the corresponding files. URL arguments can be excluded
 from the conversion process by supplying a [separator token](#-s---separator-string)
 (default `--`). Arguments after this are no longer processed by `wax` and are
-passed through verbatim e.g.:
+passed through verbatim, e.g.:
 
     $ wax --cache cmd https://example.com/foo -- --referrer https://example.com
 
-Note that the `--cache` and `--mirror` options are mutually exclusive i.e. only
+Note that the `--cache` and `--mirror` options are mutually exclusive, i.e. only
 one (or neither) should be supplied. Supplying both will cause `wax` to
 terminate with an error.
 
@@ -121,16 +121,16 @@ If a local file no longer exists, the resource is re-downloaded.
 ### -s, --separator STRING
 
 Override the default separator-token (`--`) used to mark the end of waxable
-options e.g.:
+options, e.g.:
 
     $ wax --cache --separator :: cmd https://example.com/foo :: --referrer https://example.com
 
-Note: the separator token is removed from the list of options passed to the
+Note: the separator token is removed from the list of arguments passed to the
 command.
 
 ### -S, --no-separator
 
-Disable separator-token handling i.e. leave the default separator (`--`) to be
+Disable separator-token handling, i.e. leave the default separator (`--`) to be
 handled by the command.
 
 ### -t, --timeout INTEGER
@@ -199,7 +199,7 @@ on Unix-like systems and quoted with embedded escapes in Windows
 `cmd`/`command.exe`-like shells.
 
 It's worth checking that a program actually needs waxing. Many command-line
-programs already support URLs e.g:
+programs already support URLs, e.g:
 
 ```bash
 $ eog https://upload.wikimedia.org/wikipedia/commons/4/4c/Eye_of_GNOME.png
