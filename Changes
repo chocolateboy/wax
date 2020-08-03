@@ -1,6 +1,6 @@
 Revision history for Perl extension App::Wax.
 
-2.4.0 - TBD
+2.4.0 - 2020-08-03
 
     - allow option bundling, e.g. `-c -D` can be written as `-cD`
     - add --default-directory as an alias for -D
