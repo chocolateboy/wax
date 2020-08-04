@@ -1,5 +1,9 @@
 Revision history for Perl extension App::Wax.
 
+2.4.1 - TBD
+
+    - portability: fix test failures on Strawberry Perl (thanks, Alexandr Ciornii)
+
 2.4.0 - 2020-08-03
 
     - allow option bundling, e.g. `-c -D` can be written as `-cD`

@@ -8,14 +8,17 @@ use warnings;
 use base qw(Exporter);
 
 use App::Wax;
+use File::Spec;
 use Method::Signatures::Simple;
 use Test::Differences qw(eq_or_diff);
 use Test::TinyMocker qw(mock);
 use URI::Split qw(uri_split);
 
+use constant XDG_CACHE_HOME => '/home/test/.cache';
+
 my @FILENAMES = ('1.json', '2.html');
 
-our @DEFAULT = map { "/home/test/.cache/wax/file$_" } @FILENAMES;
+our @DEFAULT = map { File::Spec->catfile(XDG_CACHE_HOME, 'wax', "file$_") } @FILENAMES;
 our @KEEP = map { "/keep/file$_" } @FILENAMES;
 our @TEMP = map { "/tmp/file$_" } @FILENAMES;
 our @URL = map { "https://example.com/$_" } @FILENAMES;
@@ -42,7 +45,7 @@ func wax_is ($args, $want) {
         $wax->dump_command(\@want)
     );
 
-    local $ENV{XDG_CACHE_HOME} = '/home/test/.cache';
+    local $ENV{XDG_CACHE_HOME} = XDG_CACHE_HOME;
 
     my $got = $wax->run(\@args, test => 1);
 
@@ -62,8 +65,8 @@ mock(
 
         if ($dir) {
             my ($scheme, $domain, $path, $query, $fragment) = uri_split($url);
-            $path =~ s{^/}{};
-            $filename = "$dir/file$path";
+            $path =~ s{^/}{}; # /1.json => 1.json
+            $filename = File::Spec->catfile($dir, "file$path");
         } else {
             $filename = $self->keep ? $FILENAME_KEEP{$url} : $FILENAME_TEMP{$url};
         }
