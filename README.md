@@ -1,6 +1,6 @@
 # wax
 
-[![Build Status](https://travis-ci.org/chocolateboy/wax.svg)](https://travis-ci.org/chocolateboy/wax)
+[![Build Status](https://github.com/chocolateboy/wax/workflows/test/badge.svg)](https://github.com/chocolateboy/wax/actions?query=workflow%3Atest)
 [![CPAN Version](https://badge.fury.io/pl/App-Wax.svg)](https://badge.fury.io/pl/App-Wax)
 
 <!-- toc -->
