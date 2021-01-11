@@ -1,6 +1,6 @@
 package App::Wax;
 
-use 5.008008;
+use 5.010000;
 
 use Digest::SHA qw(sha1_hex);
 use File::Slurper qw(read_text write_text);

@@ -19,7 +19,7 @@ jobs:
       fail-fast: false
       matrix:
         os: ['ubuntu-latest', 'macos-latest', 'windows-latest']
-        perl: ['5.8', '5.10', '5.20', '5.30', '5.32']
+        perl: ['5.10', '5.20', '5.30', '5.32']
 
     steps:
       - name: checkout
@@ -50,6 +50,13 @@ jobs:
       - run: cpanm ExtUtils::PL2Bat
         if: "matrix.os == 'windows-latest'"
 
-      - run: cpanm --installdeps --notest .
+      - run: cpanm --no-interactive --skip-satisfied --installdeps --notest .
+
+      - uses: actions/upload-artifact@v2
+        if: ${{ failure() }}
+        with:
+          name: cpanm-logs-${{ matrix.os }}-perl-v${{ matrix.perl }}
+          path: ~/.cpanm/work/*/build.log
+
       - run: perl Makefile.PL
       - run: make test

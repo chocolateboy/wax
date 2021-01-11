@@ -3,7 +3,7 @@
 [![Build Status](https://github.com/chocolateboy/wax/workflows/test/badge.svg)](https://github.com/chocolateboy/wax/actions?query=workflow%3Atest)
 [![CPAN Version](https://badge.fury.io/pl/App-Wax.svg)](https://badge.fury.io/pl/App-Wax)
 
-<!-- toc -->
+<!-- TOC -->
 
 - [NAME](#name)
 - [SYNOPSIS](#synopsis)
@@ -19,13 +19,14 @@
   - [nman](#nman)
   - [ripgrep](#ripgrep)
 - [VERSION](#version)
+- [COMPATIBILITY](#compatibility)
 - [SEE ALSO](#see-also)
   - [Tools](#tools)
   - [Links](#links)
 - [AUTHOR](#author)
 - [COPYRIGHT AND LICENSE](#copyright-and-license)
 
-<!-- tocstop -->
+<!-- TOC END -->
 
 ## NAME
 
@@ -118,6 +119,10 @@ Get the default key bindings for mpv:
 ## VERSION
 
 2.4.1
+
+## COMPATIBILITY
+
+- perl &gt;= v5.10
 
 ## SEE ALSO
 

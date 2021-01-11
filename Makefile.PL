@@ -1,4 +1,4 @@
-use 5.008008;
+use 5.010000;
 use strict;
 use warnings;
 
@@ -44,5 +44,5 @@ WriteMakefile(
     ($EUMM_VERSION >= 6.5503 ? (BUILD_REQUIRES => $TEST_REQUIRES) : ()),
     ($EUMM_VERSION >= 6.31 ? (LICENSE => 'artistic_2') : ()),
     ($EUMM_VERSION >= 6.46 ? (META_MERGE => $META_MERGE) : ()),
-    ($EUMM_VERSION >= 6.48 ? (MIN_PERL_VERSION => '5.8.8') : ()), # LWP's minimum
+    ($EUMM_VERSION >= 6.48 ? (MIN_PERL_VERSION => '5.10.0') : ()),
 );

@@ -84,6 +84,10 @@ VERSION
 
 2.4.1
 
+COMPATIBILITY
+
+- perl >= v5.10
+
 SEE ALSO
 
 Tools
