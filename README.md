@@ -122,7 +122,7 @@ Get the default key bindings for mpv:
 
 ## COMPATIBILITY
 
-- perl &gt;= v5.10
+- perl &gt;= v5.14
 
 ## SEE ALSO
 

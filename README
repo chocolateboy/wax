@@ -86,7 +86,7 @@ VERSION
 
 COMPATIBILITY
 
-- perl >= v5.10
+- perl >= v5.14
 
 SEE ALSO
 

@@ -17,7 +17,7 @@ jobs:
       should_skip: ${{ steps.skip_check.outputs.should_skip }}
     steps:
       - id: skip_check
-        uses: fkirc/skip-duplicate-actions@ea548f2a2a08c55dcb111418ca62181f7887e297
+        uses: fkirc/skip-duplicate-actions@f75f66ce1886f00957d99748a42c724f4330bdcf
         with:
           concurrent_skipping: 'same_content'
           paths_ignore: '["**/*.md", "**/*.pod"]'
@@ -31,11 +31,11 @@ jobs:
     strategy:
       matrix:
         os: ['ubuntu-latest', 'macos-latest', 'windows-latest']
-        perl: ['5.10', '5.20', '5.30', '5.32']
+        perl: ['5.14', '5.20', '5.30', '5.40', '5.42']
 
     steps:
       - name: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: set up perl v${{ matrix.perl }}
         uses: shogo82148/actions-setup-perl@v1
